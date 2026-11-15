@@ -8,10 +8,10 @@ export interface AuthFailure {
 }
 
 const MESSAGES: Record<AuthErrorKind, string> = {
-  cancelled: 'Cancelaste el inicio de sesion. Puedes intentarlo de nuevo.',
-  'popup-blocked': 'El navegador bloqueo la ventana de Google. Permite las ventanas emergentes e intenta de nuevo.',
-  network: 'No hay conexion con el servidor. Revisa tu internet e intenta de nuevo.',
-  unknown: 'No se pudo iniciar sesion. Intenta de nuevo en unos minutos.',
+  cancelled: 'Cancelaste el inicio de sesión. Podés intentarlo de nuevo.',
+  'popup-blocked': 'El navegador bloqueó la ventana de Google. Permití las ventanas emergentes e intentá de nuevo.',
+  network: 'No hay conexión con el servidor. Revisá tu internet e intentá de nuevo.',
+  unknown: 'No se pudo iniciar sesión. Intentá de nuevo en unos minutos.',
 }
 
 export function mapAuthError(error: unknown): AuthFailure {
