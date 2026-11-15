@@ -1,4 +1,4 @@
-import { doc, getDoc, runTransaction, serverTimestamp, writeBatch } from 'firebase/firestore'
+import { doc, getDoc, runTransaction, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore'
 import { getFirebase } from '@/firebase/config'
 import type { AuthUser } from '@/types/auth'
 import type { ProfileContent, PublicProfile, UserDocument } from '@/types/profile'
@@ -68,4 +68,23 @@ export async function saveOwnProfile({ uid, content, affected, existing }: SaveP
   })
 
   await batch.commit()
+}
+
+// Lee un perfil por uid. Devuelve null si no existe o no esta disponible: las reglas
+// responden "permission-denied" tanto para perfiles privados como inexistentes, y
+// para el visitante es lo mismo ("no disponible").
+export async function getPublicProfile(uid: string): Promise<PublicProfile | null> {
+  try {
+    const snap = await getDoc(doc(getFirebase().db, PROFILES, uid))
+    return snap.exists() ? (snap.data() as PublicProfile) : null
+  } catch (error) {
+    if ((error as { code?: string }).code === 'permission-denied') return null
+    throw error
+  }
+}
+
+// Publica o despublica el perfil propio. Las reglas exigen cuenta activa y haber
+// respondido la pregunta de Grupo Vazquez para publicar.
+export async function setProfilePublished(uid: string, isPublic: boolean): Promise<void> {
+  await updateDoc(doc(getFirebase().db, PROFILES, uid), { isPublic, updatedAt: serverTimestamp() })
 }
