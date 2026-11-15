@@ -12,7 +12,7 @@
     "build:dev": "tsc -b && vite build --mode dev",
     "preview": "vite preview --mode prod",
     "lint": "eslint .",
-    "typecheck": "tsc -b --pretty",
+    "typecheck": "tsc -b --pretty && npm --prefix functions run typecheck",
     "test": "vitest --run",
     "dev:emu": "vite --mode emulators",
     "emulators": "firebase emulators:start --project demo-cv-itti",

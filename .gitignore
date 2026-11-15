@@ -12,3 +12,4 @@ serviceAccount*.json
 !.env.emulators
 firestore-debug.log
 ui-debug.log
+functions/lib

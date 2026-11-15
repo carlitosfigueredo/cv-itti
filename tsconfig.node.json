@@ -21,6 +21,8 @@
   "include": [
     "vite.config.ts",
     "vitest.rules.config.ts",
-    "tests"
+    "tests",
+    "functions/src/cv.ts",
+    "functions/src/cv.test.ts"
   ]
 }
