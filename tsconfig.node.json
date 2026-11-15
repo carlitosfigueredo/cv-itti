@@ -3,7 +3,8 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2023",
     "lib": [
-      "ES2023"
+      "ES2023",
+      "DOM"
     ],
     "module": "ESNext",
     "types": [
@@ -27,6 +28,8 @@
     "functions/src/cv.test.ts",
     "functions/src/validate.ts",
     "functions/src/validate.test.ts",
-    "functions/test"
+    "functions/test",
+    "playwright.config.ts",
+    "e2e"
   ]
 }

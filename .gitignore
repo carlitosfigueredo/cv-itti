@@ -13,3 +13,6 @@ serviceAccount*.json
 firestore-debug.log
 ui-debug.log
 functions/lib
+e2e/.results
+e2e/.screenshots
+playwright-report
