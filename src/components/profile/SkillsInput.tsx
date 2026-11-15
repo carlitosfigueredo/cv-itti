@@ -29,7 +29,7 @@ export function SkillsInput({ value, onChange, error }: SkillsInputProps) {
           {...params}
           label="Habilidades"
           error={Boolean(error)}
-          helperText={error ?? `Escribe y presiona Enter. Maximo ${MAX_SKILLS}. ${value.length}/${MAX_SKILLS}`}
+          helperText={error ?? `Escribí y presioná Enter. Máximo ${MAX_SKILLS}. ${value.length}/${MAX_SKILLS}`}
           slotProps={{ htmlInput: { ...params.inputProps, maxLength: 40 } }}
         />
       )}

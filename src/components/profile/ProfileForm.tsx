@@ -74,16 +74,16 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} aria-label="Formulario de perfil">
       <Stack spacing={3}>
         <Alert severity="info">
-          Tu perfil se guarda como privado. Nadie lo ve hasta que decidas publicarlo. Al publicarlo, tu CV tambien sera publico.
+          Tu perfil se guarda como privado. Nadie lo ve hasta que decidas publicarlo. Al publicarlo, tu CV también será público.
         </Alert>
 
-        <Section title="Datos basicos">
+        <Section title="Datos básicos">
           <TextField
-            label="Nombre publico"
+            label="Nombre público"
             required
             {...register('displayName')}
             error={Boolean(errors.displayName)}
-            helperText={errors.displayName?.message ?? 'Asi aparecera en tu perfil.'}
+            helperText={errors.displayName?.message ?? 'Así aparecerá en tu perfil.'}
           />
           <TextField
             label="Titular"
@@ -91,7 +91,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             placeholder="Ej: Contador senior"
             {...register('headline')}
             error={Boolean(errors.headline)}
-            helperText={errors.headline?.message ?? 'Una linea que te describa (hasta 80 caracteres).'}
+            helperText={errors.headline?.message ?? 'Una línea que te describa (hasta 80 caracteres).'}
           />
           <Box sx={twoCols}>
             <Controller
@@ -101,7 +101,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
                 <TextField
                   select
                   required
-                  label="Area profesional"
+                  label="Área profesional"
                   {...field}
                   value={field.value ?? ''}
                   error={Boolean(errors.area)}
@@ -115,7 +115,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             />
             {area === 'otro' && (
               <TextField
-                label="Tu area"
+                label="Tu área"
                 required
                 {...register('areaOther')}
                 error={Boolean(errors.areaOther)}
@@ -133,7 +133,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
           />
         </Section>
 
-        <Section title="Ubicacion">
+        <Section title="Ubicación">
           <Box sx={twoCols}>
             <Controller
               name="country"
@@ -142,7 +142,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
                 <TextField
                   select
                   required
-                  label="Pais"
+                  label="País"
                   {...field}
                   value={field.value ?? ''}
                   error={Boolean(errors.country)}
@@ -183,7 +183,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
         <Section title="Experiencia y disponibilidad">
           <Box sx={twoCols}>
             <TextField
-              label="Anios de experiencia"
+              label="Años de experiencia"
               required
               {...register('experienceYears')}
               error={Boolean(errors.experienceYears)}
@@ -245,8 +245,8 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
         </Section>
 
         <Section
-          title="Contacto publico (opcional)"
-          description="Por defecto no se muestra ningun dato de contacto. Marca cada casilla solo si queres publicarlo."
+          title="Contacto público (opcional)"
+          description="Por defecto no se muestra ningún dato de contacto. Marcá cada casilla solo si querés publicarlo."
         >
           <Controller
             name="contactEmailPublic"
@@ -254,12 +254,12 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value ?? false} onChange={field.onChange} />}
-                label="Mostrar mi email en mi perfil publico"
+                label="Mostrar mi email en mi perfil público"
               />
             )}
           />
           <TextField
-            label="Email publico"
+            label="Email público"
             type="email"
             disabled={!emailPublic}
             {...register('publicEmail')}
@@ -272,12 +272,12 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value ?? false} onChange={field.onChange} />}
-                label="Mostrar mi telefono en mi perfil publico"
+                label="Mostrar mi teléfono en mi perfil público"
               />
             )}
           />
           <TextField
-            label="Telefono publico"
+            label="Teléfono público"
             disabled={!phonePublic}
             placeholder="+595 981 123456"
             {...register('publicPhone')}
@@ -287,17 +287,17 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
         </Section>
 
         <Section
-          title="Grupo Vazquez"
-          description="Esta plataforma esta orientada a personas de ITTI y Grupo Vazquez que perdieron su trabajo."
+          title="Grupo Vázquez"
+          description="Esta plataforma está orientada a personas de ITTI y Grupo Vázquez que perdieron su trabajo."
         >
           <Controller
             name="affectedGrupoVazquez"
             control={control}
             render={({ field }) => (
               <FormControl error={Boolean(errors.affectedGrupoVazquez)} required>
-                <FormLabel id="affected-label">Afectado Grupo Vazquez?</FormLabel>
+                <FormLabel id="affected-label">¿Afectado Grupo Vázquez?</FormLabel>
                 <RadioGroup row aria-labelledby="affected-label" {...field} value={field.value ?? ''}>
-                  <FormControlLabel value="yes" control={<Radio />} label="Si" />
+                  <FormControlLabel value="yes" control={<Radio />} label="Sí" />
                   <FormControlLabel value="no" control={<Radio />} label="No" />
                 </RadioGroup>
                 <FormHelperText>{errors.affectedGrupoVazquez?.message ?? 'Tu respuesta es privada por defecto.'}</FormHelperText>
@@ -310,7 +310,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value ?? false} onChange={field.onChange} />}
-                label="Mostrar esta respuesta en mi perfil publico. Entiendo que revela informacion laboral personal."
+                label="Mostrar esta respuesta en mi perfil público. Entiendo que revela información laboral personal."
               />
             )}
           />
