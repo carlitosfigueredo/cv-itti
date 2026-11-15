@@ -80,9 +80,14 @@ export function Header() {
             </>
           ) : (
             status === 'unauthenticated' && (
-              <Button component={RouterLink} to="/login" variant="contained" size="small" sx={{ ml: 0.5 }}>
-                Ingresar
-              </Button>
+              <>
+                <Button component={RouterLink} to="/login" color="inherit" sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
+                  Ingresar
+                </Button>
+                <Button component={RouterLink} to="/login" variant="contained" size="small" sx={{ ml: 0.5, whiteSpace: 'nowrap' }}>
+                  Cargar mi CV
+                </Button>
+              </>
             )
           )}
         </Toolbar>
