@@ -60,19 +60,19 @@ TypeScript check passes.
 
 ## Phase 2 --- Firebase project integration
 
--   [ ] Create Firebase client initialization module.
--   [ ] Read configuration from `VITE_FIREBASE_*` variables.
--   [ ] Add development environment validation and helpful
+-   [x] Create Firebase client initialization module.
+-   [x] Read configuration from `VITE_FIREBASE_*` variables.
+-   [x] Add development environment validation and helpful
     missing-variable errors.
--   [ ] Configure Firebase Authentication, Firestore, Storage, Hosting,
+-   [x] Configure Firebase Authentication, Firestore, Storage, Hosting,
     and Emulators.
--   [ ] Add Firebase Emulator Suite scripts.
--   [ ] Document how to connect a local Firebase project.
--   [ ] Do not add Admin SDK credentials to the frontend.
+-   [x] Add Firebase Emulator Suite scripts.
+-   [x] Document how to connect a local Firebase project.
+-   [x] Do not add Admin SDK credentials to the frontend.
 
-**Validation:** - \[ \] App initializes with valid local
-configuration. - \[ \] App fails clearly and safely when required
-configuration is missing. - \[ \] No secrets are committed.
+**Validation:** - \[x\] App initializes with valid local
+configuration. - \[x\] App fails clearly and safely when required
+configuration is missing. - \[x\] No secrets are committed.
 
 **Exit criteria:** frontend connects to the intended Firebase
 development project or emulators.

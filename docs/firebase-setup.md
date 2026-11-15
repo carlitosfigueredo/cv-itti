@@ -53,3 +53,18 @@ Esto crea `.firebaserc` con el alias. La config de emuladores se agrega en la Fa
 - Desplegar siempre con el proyecto explicito: `firebase deploy --project dev`.
 - Cada proyecto necesita activar a mano el proveedor Google en Authentication y, mas adelante, registrar App Check.
 - Cada proyecto tiene su propio presupuesto de USD 5.
+
+## Emuladores locales
+
+Requieren Java (probado con 24). Usan el proyecto ficticio `demo-cv-itti`, por lo que nunca tocan datos reales.
+
+```bash
+npm run emulators   # Auth 9099, Firestore 8080, Storage 9199, Hosting 5000, UI 4000
+npm run dev:emu     # app apuntando a los emuladores (usa .env.emulators)
+```
+
+La primera ejecucion descarga los JAR de los emuladores. Las reglas de `firestore.rules` y `storage.rules` estan cerradas (deny all) hasta que se implementen las reglas reales en las fases 4 a 9. Los headers de seguridad estan en `firebase.json`; el CSP se agrega en la Fase 9 una vez conocidos los dominios que usa el login con Google.
+
+## Validacion de configuracion
+
+Si falta alguna variable `VITE_FIREBASE_*`, la app muestra una pantalla con la lista de variables faltantes en vez de arrancar.
