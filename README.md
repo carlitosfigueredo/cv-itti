@@ -30,4 +30,4 @@ Los archivos `.env.*.local` no se commitean. Usar `.env.example` como plantilla 
 
 ## Estado
 
-Fase 0 y Fase 1 completas. Siguiente: Fase 2 (integracion Firebase y emuladores). Ver `.kiro/specs/talent-platform/tasks.md` y `docs/change-tracker.md`.
+Fases 0 a 3 completas (base, Firebase y login con Google). Siguiente: Fase 4 (perfil). Ver `.kiro/specs/talent-platform/tasks.md` y `docs/change-tracker.md`.

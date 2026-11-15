@@ -79,14 +79,14 @@ development project or emulators.
 
 ## Phase 3 --- Google authentication and route protection
 
--   [ ] Implement Google sign-in.
--   [ ] Implement sign-out.
--   [ ] Create authentication context/provider and loading state.
--   [ ] Restore session on page refresh.
--   [ ] Implement authenticated route guard.
--   [ ] Implement administrator route guard based on trusted claims.
--   [ ] Handle popup cancellation, blocked popups, and provider errors.
--   [ ] Add authentication tests.
+-   [x] Implement Google sign-in.
+-   [x] Implement sign-out.
+-   [x] Create authentication context/provider and loading state.
+-   [x] Restore session on page refresh.
+-   [x] Implement authenticated route guard.
+-   [x] Implement administrator route guard based on trusted claims.
+-   [x] Handle popup cancellation, blocked popups, and provider errors.
+-   [x] Add authentication tests.
 
 **Exit criteria:** user can sign in/out, refresh safely, and access
 protected routes only when authenticated.
