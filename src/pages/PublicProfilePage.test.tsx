@@ -34,7 +34,7 @@ describe('PublicProfilePage', () => {
   it('indica "no disponible" cuando el perfil es privado o no existe', async () => {
     service.getPublicProfile.mockResolvedValue(null)
     setup()
-    expect(await screen.findByText('Perfil no disponible')).toBeInTheDocument()
+    expect(await screen.findByText('Este perfil no está disponible')).toBeInTheDocument()
   })
 
   it('no ofrece reportar el propio perfil y avisa que es vista previa si es privado', async () => {

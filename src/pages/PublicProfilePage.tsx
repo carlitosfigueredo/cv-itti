@@ -24,7 +24,7 @@ function PublicProfileContent({ uid }: { uid: string | undefined }) {
   useEffect(() => {
     if (!name) return
     const previous = document.title
-    document.title = `${name} | Talent Platform`
+    document.title = `${name} | itti talentos`
     return () => {
       document.title = previous
     }
@@ -44,9 +44,9 @@ function PublicProfileContent({ uid }: { uid: string | undefined }) {
     return (
       <PageContainer maxWidth="md">
         <EmptyState
-          title="Perfil no disponible"
-          description="Este perfil no existe o su dueño lo dejó privado."
-          action={<Button component={RouterLink} to="/talentos" variant="contained">Ver talentos</Button>}
+          title="Este perfil no está disponible"
+          description="Puede que no exista o que su dueño lo haya ocultado."
+          action={<Button component={RouterLink} to="/" variant="contained">Ver talentos</Button>}
         />
       </PageContainer>
     )

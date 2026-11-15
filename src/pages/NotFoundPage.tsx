@@ -7,9 +7,9 @@ export default function NotFoundPage() {
   return (
     <PageContainer>
       <EmptyState
-        title="Página no encontrada"
-        description="La dirección que buscás no existe."
-        action={<Button component={RouterLink} to="/" variant="contained">Volver al inicio</Button>}
+        title="Esta página no existe"
+        description="Puede que el enlace esté mal escrito o que la página se haya movido."
+        action={<Button component={RouterLink} to="/" variant="contained">Ir al inicio</Button>}
       />
     </PageContainer>
   )

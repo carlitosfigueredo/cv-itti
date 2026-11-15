@@ -29,9 +29,9 @@ function DashboardContent({ user }: { user: AuthUser }) {
         <Card>
           <CardContent>
             <Stack spacing={2} sx={{ p: 1 }}>
-              <Typography variant="h3" component="h2">Todavía no creaste tu perfil</Typography>
+              <Typography variant="h3" component="h2">Creá tu perfil</Typography>
               <Typography color="text.secondary">
-                Completá tus datos profesionales. Tu perfil será privado hasta que decidas publicarlo.
+                Contanos a qué te dedicás y subí tu CV. Nadie lo ve hasta que lo publiques.
               </Typography>
               <div>
                 <Button component={RouterLink} to="/perfil/editar" variant="contained">Crear mi perfil</Button>

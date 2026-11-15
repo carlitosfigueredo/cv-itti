@@ -39,10 +39,9 @@ export default function LoginPage() {
       <Card>
         <CardContent>
           <Stack spacing={3} sx={{ p: 1 }}>
-            <Typography variant="h2" component="h1">Ingresar</Typography>
+            <Typography variant="h2" component="h1">Ingresá a itti talentos</Typography>
             <Typography color="text.secondary">
-              Usá tu cuenta de Google para crear tu perfil. Tu perfil y tu CV son privados hasta que
-              decidas publicarlos.
+              Usá tu cuenta de Google. Tu perfil arranca privado: nadie lo ve hasta que vos lo publiques.
             </Typography>
             {failure && (
               <Alert severity={failure.kind === 'cancelled' ? 'info' : 'error'}>{failure.message}</Alert>
