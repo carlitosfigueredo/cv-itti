@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import { Outlet } from 'react-router-dom'
+import { ScrollToTop } from '@/routes/ScrollToTop'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -17,6 +18,7 @@ export function AppLayout() {
       >
         Saltar al contenido
       </Link>
+      <ScrollToTop />
       <Header />
       <Box component="main" id="contenido" tabIndex={-1} sx={{ flexGrow: 1, outline: 'none' }}>
         <Outlet />
