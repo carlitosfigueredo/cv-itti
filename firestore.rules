@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Reglas cerradas por defecto (Fase 2). Las reglas reales por coleccion
+// se agregan en las fases 4 a 9. No desplegar reglas permisivas.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
