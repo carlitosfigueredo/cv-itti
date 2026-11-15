@@ -1,0 +1,25 @@
+import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
+import { Outlet } from 'react-router-dom'
+import { Footer } from './Footer'
+import { Header } from './Header'
+
+export function AppLayout() {
+  return (
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Link
+        href="#contenido"
+        sx={{
+          position: 'absolute', left: -9999, '&:focus': { left: 8, top: 8, zIndex: 2000, bgcolor: 'background.paper', p: 1 },
+        }}
+      >
+        Saltar al contenido
+      </Link>
+      <Header />
+      <Box component="main" id="contenido" tabIndex={-1} sx={{ flexGrow: 1 }}>
+        <Outlet />
+      </Box>
+      <Footer />
+    </Box>
+  )
+}
