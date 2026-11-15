@@ -19,7 +19,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return signedIn() && request.auth.token.admin == true;
+      return signedIn() && request.auth.token.get('admin', false) == true;
     }
 
     function userPath(uid) {
@@ -73,7 +73,7 @@ service cloud.firestore {
           'summary', 'experienceYears', 'experienceBand', 'skills', 'skillsNormalized', 'workMode',
           'availability', 'linkedin', 'github', 'portfolio', 'isPublic', 'contactEmailPublic',
           'publicEmail', 'contactPhonePublic', 'publicPhone', 'affectedGrupoVazquezPublic',
-          'affectedGrupoVazquez', 'createdAt', 'updatedAt'
+          'affectedGrupoVazquez', 'cvPath', 'cvUpdatedAt', 'cvSize', 'createdAt', 'updatedAt'
         ])
         && d.keys().hasAll([
           'uid', 'displayName', 'headline', 'area', 'country', 'city', 'cityNormalized',
@@ -113,6 +113,13 @@ service cloud.firestore {
         && (!('publicPhone' in d) || (isStr(d.publicPhone, 6, 20) && d.publicPhone.matches('^\\+?[0-9 ()-]{6,20}$')))
         && d.affectedGrupoVazquezPublic is bool
         && ('affectedGrupoVazquez' in d) == d.affectedGrupoVazquezPublic
+        // Metadatos del CV: o estan los tres o no esta ninguno. El archivo vive en Storage.
+        && (('cvPath' in d) == ('cvUpdatedAt' in d))
+        && (('cvPath' in d) == ('cvSize' in d))
+        && (!('cvPath' in d)
+          || (d.cvPath == 'cvs/' + uid + '/cv.pdf'
+            && d.cvUpdatedAt is timestamp
+            && d.cvSize is int && d.cvSize > 0 && d.cvSize <= 5242880))
         // El valor publico debe coincidir con el valor privado que se guarda en el mismo batch.
         && (!('affectedGrupoVazquez' in d)
           || d.affectedGrupoVazquez == getAfter(userPath(uid)).data.affectedGrupoVazquez)
