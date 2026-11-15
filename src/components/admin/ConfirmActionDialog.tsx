@@ -8,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { useState } from 'react'
 import { adminErrorMessage } from '@/services/admin.errors'
 
@@ -30,6 +31,7 @@ interface ConfirmActionDialogProps {
 // Dialogo unico para todas las acciones de moderacion: pide motivo (queda en la
 // auditoria), muestra el progreso y traduce los errores de la funcion.
 export function ConfirmActionDialog({ config, onClose, onDone }: ConfirmActionDialogProps) {
+  const isMobile = useIsMobile()
   const [reason, setReason] = useState('')
   const [typed, setTyped] = useState('')
   const [busy, setBusy] = useState(false)
@@ -62,7 +64,7 @@ export function ConfirmActionDialog({ config, onClose, onDone }: ConfirmActionDi
   const blocked = Boolean(config?.typeToConfirm) && typed.trim() !== config?.typeToConfirm
 
   return (
-    <Dialog open={config !== null} onClose={close} fullWidth maxWidth="sm" aria-labelledby="confirm-action-title">
+    <Dialog fullScreen={isMobile} open={config !== null} onClose={close} fullWidth maxWidth="sm" aria-labelledby="confirm-action-title">
       <DialogTitle id="confirm-action-title">{config?.title}</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>

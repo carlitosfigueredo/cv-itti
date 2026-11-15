@@ -74,7 +74,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} aria-label="Formulario de perfil">
       <Stack spacing={3}>
         <Alert severity="info" role="note">
-          Tu perfil se guarda como privado. Nadie lo ve hasta que decidas publicarlo. Al publicarlo, tu CV también será público.
+          Guardar no publica nada: tu perfil queda privado hasta que lo publiques desde tu panel. Al publicarlo, tu CV también se puede descargar.
         </Alert>
 
         <Section title="Datos básicos">
@@ -83,7 +83,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             required
             {...register('displayName')}
             error={Boolean(errors.displayName)}
-            helperText={errors.displayName?.message ?? 'Así aparecerá en tu perfil.'}
+            helperText={errors.displayName?.message ?? 'Es el nombre que van a ver las empresas.'}
           />
           <TextField
             label="Titular"
@@ -91,7 +91,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             placeholder="Ej: Contador senior"
             {...register('headline')}
             error={Boolean(errors.headline)}
-            helperText={errors.headline?.message ?? 'Una línea que te describa (hasta 80 caracteres).'}
+            helperText={errors.headline?.message ?? 'Una línea sobre lo que hacés (hasta 80 caracteres).'}
           />
           <Box sx={twoCols}>
             <Controller
@@ -323,6 +323,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
             type="submit"
             variant="contained"
             size="large"
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
             disabled={isSubmitting}
             startIcon={isSubmitting ? <CircularProgress size={18} color="inherit" /> : undefined}
           >

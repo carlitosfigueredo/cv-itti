@@ -11,6 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { setProfilePublished } from '@/services/profile.service'
@@ -22,6 +23,7 @@ interface PublicationCardProps {
 }
 
 export function PublicationCard({ profile, onChanged }: PublicationCardProps) {
+  const isMobile = useIsMobile()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -92,7 +94,7 @@ export function PublicationCard({ profile, onChanged }: PublicationCardProps) {
         </Stack>
       </CardContent>
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} aria-labelledby="publicar-titulo">
+      <Dialog fullScreen={isMobile} open={confirmOpen} onClose={() => setConfirmOpen(false)} aria-labelledby="publicar-titulo">
         <DialogTitle id="publicar-titulo">¿Publicar tu perfil?</DialogTitle>
         <DialogContent>
           <DialogContentText component="div">

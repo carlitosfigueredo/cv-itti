@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
@@ -21,8 +22,9 @@ function ReviewContent({ uid }: { uid: string }) {
 }
 
 export function ProfileReviewDialog({ uid, onClose }: { uid: string | null; onClose: () => void }) {
+  const isMobile = useIsMobile()
   return (
-    <Dialog open={uid !== null} onClose={onClose} fullWidth maxWidth="md" aria-labelledby="review-title">
+    <Dialog fullScreen={isMobile} open={uid !== null} onClose={onClose} fullWidth maxWidth="md" aria-labelledby="review-title">
       <DialogTitle id="review-title">Revisión de perfil</DialogTitle>
       <DialogContent dividers>{uid && <ReviewContent key={uid} uid={uid} />}</DialogContent>
       <DialogActions>

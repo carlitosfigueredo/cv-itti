@@ -165,13 +165,13 @@ export function UsersPanel() {
   return (
     <Stack spacing={2}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <TextField select label="Afectado Grupo Vázquez" value={affected} onChange={(e) => { setList({ status: 'loading' }); setAffected(e.target.value as AffectedFilter) }} sx={{ minWidth: 220 }}>
+        <TextField select label="Afectado Grupo Vázquez" value={affected} onChange={(e) => { setList({ status: 'loading' }); setAffected(e.target.value as AffectedFilter) }} sx={{ minWidth: { sm: 220 } }}>
           <MenuItem value="all">Todos</MenuItem>
           <MenuItem value="yes">Sí</MenuItem>
           <MenuItem value="no">No</MenuItem>
           <MenuItem value="unanswered">Sin responder</MenuItem>
         </TextField>
-        <TextField select label="Estado de la cuenta" value={status} onChange={(e) => { setList({ status: 'loading' }); setStatus(e.target.value as StatusFilter) }} sx={{ minWidth: 200 }}>
+        <TextField select label="Estado de la cuenta" value={status} onChange={(e) => { setList({ status: 'loading' }); setStatus(e.target.value as StatusFilter) }} sx={{ minWidth: { sm: 200 } }}>
           <MenuItem value="all">Todas</MenuItem>
           <MenuItem value="active">Activas</MenuItem>
           <MenuItem value="suspended">Suspendidas</MenuItem>
@@ -192,9 +192,9 @@ export function UsersPanel() {
               <TableHead>
                 <TableRow>
                   <TableCell>Persona</TableCell>
-                  <TableCell>Afectado GV</TableCell>
+                  <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Afectado GV</TableCell>
                   <TableCell>Estado</TableCell>
-                  <TableCell>Alta</TableCell>
+                  <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Alta</TableCell>
                   <TableCell align="right">Acciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -203,13 +203,13 @@ export function UsersPanel() {
                   <TableRow key={row.uid} hover>
                     <TableCell>
                       <Typography variant="body2" sx={{ fontWeight: 600 }}>{row.displayName || 'Sin nombre'}</Typography>
-                      <Typography variant="caption" color="text.secondary">{row.email}</Typography>
+                      <Typography variant="caption" color="text.secondary" sx={{ overflowWrap: 'anywhere' }}>{row.email}</Typography>
                     </TableCell>
-                    <TableCell>{affectedLabel(row.affectedGrupoVazquez)}</TableCell>
+                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{affectedLabel(row.affectedGrupoVazquez)}</TableCell>
                     <TableCell>
                       <Chip size="small" label={row.accountStatus === 'active' ? 'Activa' : 'Suspendida'} color={row.accountStatus === 'active' ? 'default' : 'error'} />
                     </TableCell>
-                    <TableCell>{row.createdAt ? dayjs(row.createdAt.toDate()).format('DD/MM/YYYY') : '—'}</TableCell>
+                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{row.createdAt ? dayjs(row.createdAt.toDate()).format('DD/MM/YYYY') : '—'}</TableCell>
                     <TableCell align="right">
                       <IconButton aria-label={`Acciones para ${row.displayName || row.email}`} onClick={(e) => setMenu({ anchor: e.currentTarget, row })}>
                         <MoreVertIcon />

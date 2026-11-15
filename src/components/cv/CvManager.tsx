@@ -37,7 +37,7 @@ export function CvManager({ profile, onChanged }: CvManagerProps) {
       <Card>
         <CardContent>
           <Typography variant="h3" component="h2" gutterBottom>Mi CV</Typography>
-          <Typography color="text.secondary">Primero creá tu perfil para poder subir tu CV.</Typography>
+          <Typography color="text.secondary">Primero creá tu perfil y después vas a poder subir tu CV.</Typography>
         </CardContent>
       </Card>
     )
@@ -113,12 +113,12 @@ export function CvManager({ profile, onChanged }: CvManagerProps) {
               {profile.cvSize ? ` (${formatBytes(profile.cvSize)})` : ''}.
             </Typography>
           ) : (
-            <Typography color="text.secondary">Todavía no subiste tu CV. Solo se aceptan archivos PDF de hasta 5 MB.</Typography>
+            <Typography color="text.secondary">Todavía no subiste tu CV. Aceptamos PDF de hasta 5 MB.</Typography>
           )}
 
           <Alert severity="info" role="note">
-            Tu CV es público mientras tu perfil esté publicado. Si despublicás tu perfil, nadie podrá descargarlo desde
-            la plataforma, pero no es posible recuperar copias que ya se hayan descargado.
+            Mientras tu perfil esté publicado, cualquiera puede descargar tu CV. Si dejás de publicarlo, deja de estar
+            disponible acá, pero no podemos recuperar copias que alguien ya haya descargado.
           </Alert>
 
           {progress !== null && (

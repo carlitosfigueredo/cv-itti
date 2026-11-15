@@ -36,7 +36,7 @@ describe('CvManager', () => {
     render(<CvManager profile={baseProfile} onChanged={async () => {}} />)
     expect(screen.getByRole('button', { name: 'Subir CV' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Descargar' })).not.toBeInTheDocument()
-    expect(screen.getByText(/es público mientras tu perfil esté publicado/i)).toBeInTheDocument()
+    expect(screen.getByText(/mientras tu perfil esté publicado, cualquiera puede descargar tu cv/i)).toBeInTheDocument()
   })
 
   it('con CV muestra fecha, tamano y las tres acciones', () => {

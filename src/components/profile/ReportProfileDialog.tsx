@@ -11,6 +11,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import {
@@ -32,6 +33,7 @@ interface ReportProfileDialogProps {
 type Outcome = { kind: 'sent' | 'already-reported' | 'error' } | null
 
 export function ReportProfileDialog({ open, onClose, profileUid, reporterUid, returnTo }: ReportProfileDialogProps) {
+  const isMobile = useIsMobile()
   const [reason, setReason] = useState<ReportReason>('inappropriate')
   const [comment, setComment] = useState('')
   const [sending, setSending] = useState(false)
@@ -54,7 +56,7 @@ export function ReportProfileDialog({ open, onClose, profileUid, reporterUid, re
   const done = outcome?.kind === 'sent' || outcome?.kind === 'already-reported'
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" aria-labelledby="report-title">
+    <Dialog fullScreen={isMobile} open={open} onClose={handleClose} fullWidth maxWidth="sm" aria-labelledby="report-title">
       <DialogTitle id="report-title">Reportar perfil</DialogTitle>
       <DialogContent>
         {!reporterUid ? (

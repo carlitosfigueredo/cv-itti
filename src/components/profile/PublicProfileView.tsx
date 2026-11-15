@@ -74,7 +74,7 @@ export function PublicProfileView({ profile, preview, onDownloadCv, downloadingC
                 <Typography variant="h2" component="h1">{profile.displayName}</Typography>
                 <Typography variant="h6" component="p" color="text.secondary">{profile.headline}</Typography>
               </Box>
-              {actions}
+              {actions && <Box sx={{ alignSelf: { xs: 'flex-start', sm: 'center' }, ml: { xs: -1, sm: 0 } }}>{actions}</Box>}
             </Stack>
 
             <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
