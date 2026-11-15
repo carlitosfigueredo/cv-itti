@@ -75,6 +75,10 @@ export interface ProfileContent {
 export interface PublicProfile extends ProfileContent {
   uid: string
   isPublic: boolean
+  // Metadatos del CV (el PDF vive en Storage: cvs/{uid}/cv.pdf).
+  cvPath?: string
+  cvUpdatedAt?: Timestamp
+  cvSize?: number
   createdAt: Timestamp
   updatedAt: Timestamp
 }

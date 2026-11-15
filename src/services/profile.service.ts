@@ -59,6 +59,10 @@ export async function saveOwnProfile({ uid, content, affected, existing }: SaveP
     ...content,
     uid,
     isPublic: existing?.isPublic ?? false,
+    // Editar el perfil no debe borrar los metadatos del CV (set reemplaza el documento).
+    ...(existing?.cvPath
+      ? { cvPath: existing.cvPath, cvUpdatedAt: existing.cvUpdatedAt, cvSize: existing.cvSize }
+      : {}),
     createdAt: existing?.createdAt ?? serverTimestamp(),
     updatedAt: serverTimestamp(),
   })
