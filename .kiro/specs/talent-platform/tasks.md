@@ -93,20 +93,20 @@ protected routes only when authenticated.
 
 ## Phase 4 --- Private user document and profile model
 
--   [ ] Define TypeScript types for private user and public profile
+-   [x] Define TypeScript types for private user and public profile
     documents.
--   [ ] Define Zod validation schemas.
--   [ ] Implement profile service functions.
--   [ ] Create private `users/{uid}` document on first successful
+-   [x] Define Zod validation schemas.
+-   [x] Implement profile service functions.
+-   [x] Create private `users/{uid}` document on first successful
     sign-in using safe fields.
--   [ ] Create/edit own `publicProfiles/{uid}` document.
--   [ ] Keep private and public data separated.
--   [ ] Enforce publication defaults as private.
--   [ ] Add "Afectado Grupo Vazquez?" (Yes/No) to the private user model,
+-   [x] Create/edit own `publicProfiles/{uid}` document.
+-   [x] Keep private and public data separated.
+-   [x] Enforce publication defaults as private.
+-   [x] Add "Afectado Grupo Vazquez?" (Yes/No) to the private user model,
     Zod schema, and profile form, with the separate public-consent
     checkbox. Required before publishing.
--   [ ] Add profile form sections and validation feedback.
--   [ ] Add profile service and schema tests.
+-   [x] Add profile form sections and validation feedback.
+-   [x] Add profile service and schema tests.
 
 **Exit criteria:** authenticated user can create and edit their own
 profile without exposing private account fields.

@@ -136,7 +136,6 @@ interface UserDocument {
   uid: string;
   email: string;
   displayName: string;
-  photoURL: string | null;
   affectedGrupoVazquez: boolean | null; // null = not answered yet
   accountStatus: "active" | "suspended"; // written only by trusted code
   createdAt: Timestamp;
