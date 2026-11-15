@@ -6,17 +6,19 @@ import { Header } from './Header'
 
 export function AppLayout() {
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
       <Link
         href="#contenido"
         sx={{
-          position: 'absolute', left: -9999, '&:focus': { left: 8, top: 8, zIndex: 2000, bgcolor: 'background.paper', p: 1 },
+          position: 'absolute',
+          left: -9999,
+          '&:focus': { left: 8, top: 8, zIndex: 2000, bgcolor: 'background.paper', p: 1, borderRadius: 1 },
         }}
       >
         Saltar al contenido
       </Link>
       <Header />
-      <Box component="main" id="contenido" tabIndex={-1} sx={{ flexGrow: 1 }}>
+      <Box component="main" id="contenido" tabIndex={-1} sx={{ flexGrow: 1, outline: 'none' }}>
         <Outlet />
       </Box>
       <Footer />
