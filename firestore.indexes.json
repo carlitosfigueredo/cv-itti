@@ -103,21 +103,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "affectedGrupoVazquez",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updatedAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "publicProfiles",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "skillsNormalized",
+          "fieldPath": "searchTokens",
           "arrayConfig": "CONTAINS"
         },
         {

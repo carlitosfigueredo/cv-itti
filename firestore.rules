@@ -77,7 +77,7 @@ service cloud.firestore {
           'summary', 'experienceYears', 'experienceBand', 'skills', 'skillsNormalized', 'workMode',
           'availability', 'linkedin', 'github', 'portfolio', 'isPublic', 'contactEmailPublic',
           'publicEmail', 'contactPhonePublic', 'publicPhone', 'affectedGrupoVazquezPublic',
-          'affectedGrupoVazquez', 'cvPath', 'cvUpdatedAt', 'cvSize', 'createdAt', 'updatedAt'
+          'affectedGrupoVazquez', 'cvPath', 'cvUpdatedAt', 'cvSize', 'searchTokens', 'createdAt', 'updatedAt'
         ])
         && d.keys().hasAll([
           'uid', 'displayName', 'headline', 'area', 'country', 'city', 'cityNormalized',
@@ -103,6 +103,9 @@ service cloud.firestore {
           || (d.experienceYears >= 10 && d.experienceBand == '10+'))
         && d.skills is list && d.skills.size() <= 15
         && d.skillsNormalized is list && d.skillsNormalized.size() == d.skills.size()
+        // Palabras clave de busqueda: opcional (perfiles viejos no lo tienen) y con tope.
+        // Las reglas no pueden verificar que correspondan al perfil: el abuso se modera.
+        && (!('searchTokens' in d) || (d.searchTokens is list && d.searchTokens.size() <= 300))
         && d.workMode in ['remote', 'hybrid', 'onsite', 'any']
         && d.availability in ['available', 'not_available']
         && (!('linkedin' in d) || isHttpsUrl(d.linkedin))

@@ -83,10 +83,16 @@ describe('publicProfiles: escritura', () => {
     ['resumen muy largo', { summary: 'a'.repeat(1001) }],
     ['campo no permitido', { isAdmin: true }],
     ['ciudad normalizada con mayusculas', { cityNormalized: 'Asuncion' }],
+    ['palabras clave que no son lista', { searchTokens: 'contadora' }],
+    ['demasiadas palabras clave', { searchTokens: Array.from({ length: 301 }, (_, i) => `t${i}`) }],
     ['area otro sin texto', { area: 'otro' }],
     ['texto de area sin ser otro', { areaOther: 'algo' }],
   ])('rechaza %s', async (_name, extra) => {
     await assertFails(saveProfileBatch(as('u1'), 'u1', false, baseProfile('u1', extra)))
+  })
+
+  it('acepta palabras clave de busqueda dentro del tope', async () => {
+    await assertSucceeds(saveProfileBatch(as('u1'), 'u1', false, baseProfile('u1', { searchTokens: ['contadora', 'conta'] })))
   })
 
   it('acepta area propia cuando el area es otro', async () => {
@@ -250,9 +256,9 @@ describe('publicProfiles: ciclo de publicacion', () => {
 
 describe('publicProfiles: consultas del directorio', () => {
   beforeEach(async () => {
-    await seedProfile(env, 'p1', { isPublic: true, area: 'finanzas', workMode: 'remote', skills: ['Excel'], skillsNormalized: ['excel'] })
+    await seedProfile(env, 'p1', { isPublic: true, area: 'finanzas', workMode: 'remote', skills: ['Excel'], skillsNormalized: ['excel'], searchTokens: ['excel', 'ex', 'exc'] })
     await seedProfile(env, 'p2', { isPublic: true, area: 'tecnologia', workMode: 'any' })
-    await seedProfile(env, 'priv', { isPublic: false, area: 'finanzas', workMode: 'remote', skillsNormalized: ['excel'] })
+    await seedProfile(env, 'priv', { isPublic: false, area: 'finanzas', workMode: 'remote', skillsNormalized: ['excel'], searchTokens: ['excel', 'exc'] })
   })
 
   const col = () => collection(anon(), 'publicProfiles')
@@ -263,7 +269,7 @@ describe('publicProfiles: consultas del directorio', () => {
       where('isPublic', '==', true),
       where('area', '==', 'finanzas'),
       where('workMode', 'in', ['remote', 'any']),
-      where('skillsNormalized', 'array-contains', 'excel'),
+      where('searchTokens', 'array-contains', 'exc'),
       orderBy('updatedAt', 'desc'),
       limit(21),
     )
@@ -279,7 +285,7 @@ describe('publicProfiles: consultas del directorio', () => {
 
   it('una consulta sin isPublic == true es rechazada aunque tenga otros filtros', async () => {
     await assertFails(getDocs(query(col(), where('area', '==', 'finanzas'), orderBy('updatedAt', 'desc'), limit(21))))
-    await assertFails(getDocs(query(col(), where('skillsNormalized', 'array-contains', 'excel'))))
+    await assertFails(getDocs(query(col(), where('searchTokens', 'array-contains', 'exc'))))
   })
 
   it('no se puede listar perfiles privados ni con la sesion de otro usuario', async () => {
