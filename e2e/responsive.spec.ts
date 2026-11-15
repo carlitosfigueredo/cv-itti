@@ -42,7 +42,7 @@ for (const scheme of SCHEMES) {
 
       test('inicio: banner del CV y talentos', async ({ page }) => {
         await page.goto('/')
-        await expect(page.getByRole('heading', { level: 1, name: 'Talentos' })).toBeVisible()
+        await expect(page.getByRole('heading', { level: 1, name: /encontrá el mejor talento/i })).toBeVisible()
         await expect(page.getByRole('link', { name: 'Cargar mi CV' })).toBeVisible()
         await expect(page.getByRole('link', { name: /ana lópez benítez/i })).toBeVisible()
         await expectNoHorizontalScroll(page)
@@ -54,6 +54,18 @@ for (const scheme of SCHEMES) {
         await expect(page.getByRole('heading', { level: 1, name: /maría josé/i })).toBeVisible()
         await expectNoHorizontalScroll(page)
         await page.screenshot({ path: `e2e/.screenshots/perfil-${vp.name}-${scheme}.png`, fullPage: true })
+      })
+
+      test('textos legales', async ({ page }) => {
+        await page.goto('/legal/privacidad')
+        await expect(page.getByRole('heading', { level: 1, name: /privacidad y tratamiento de datos/i })).toBeVisible()
+        await expectNoHorizontalScroll(page)
+        await page.getByRole('contentinfo').getByRole('link', { name: 'Términos y condiciones' }).click()
+        await expect(page.getByRole('heading', { level: 1, name: 'Términos y condiciones' })).toBeVisible()
+        // Al cambiar de pagina desde el pie, la nueva pagina abre arriba.
+        await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+        await expectNoHorizontalScroll(page)
+        await page.screenshot({ path: `e2e/.screenshots/terminos-${vp.name}-${scheme}.png`, fullPage: true })
       })
 
       test('ingresar', async ({ page }) => {
