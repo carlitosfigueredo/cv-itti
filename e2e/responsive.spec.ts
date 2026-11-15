@@ -42,7 +42,8 @@ for (const scheme of SCHEMES) {
 
       test('inicio: banner del CV y talentos', async ({ page }) => {
         await page.goto('/')
-        await expect(page.getByRole('heading', { name: /cargá tu cv/i })).toBeVisible()
+        await expect(page.getByRole('heading', { level: 1, name: 'Talentos' })).toBeVisible()
+        await expect(page.getByRole('link', { name: 'Cargar mi CV' })).toBeVisible()
         await expect(page.getByRole('link', { name: /ana lópez benítez/i })).toBeVisible()
         await expectNoHorizontalScroll(page)
         await page.screenshot({ path: `e2e/.screenshots/inicio-${vp.name}-${scheme}.png`, fullPage: true })
@@ -79,10 +80,46 @@ test.describe('tema claro y oscuro', () => {
     await expect(page.getByRole('button', { name: 'Cambiar a tema claro' })).toBeVisible()
   })
 
-  test('en celular los filtros arrancan plegados y se pueden abrir', async ({ page }) => {
+  test('en celular los filtros extra se abren en un panel desde abajo y se aplican', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('combobox', { name: 'Área' })).toBeHidden()
-    await page.getByRole('button', { name: /filtrar talentos/i }).click()
-    await expect(page.getByRole('combobox', { name: 'Área' })).toBeVisible()
+    await page.getByRole('button', { name: /más filtros/i }).click()
+    await page.getByRole('combobox', { name: 'Área' }).click()
+    await page.getByRole('option', { name: 'Tecnología' }).click()
+    await page.screenshot({ path: 'e2e/.screenshots/panel-filtros-celular-390.png' })
+    await page.getByRole('button', { name: 'Ver resultados' }).click()
+    await expect(page).toHaveURL(/area=tecnologia/)
+    await expect(page.getByRole('link', { name: /carlos giménez/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /ana lópez/i })).toBeHidden()
+  })
+})
+
+test.describe('buscador', () => {
+  test.use({ viewport: { width: 1280, height: 800 }, colorScheme: 'light' })
+
+  test('buscar "conta" encuentra a quien es contadora, sin tildes ni palabra completa', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('searchbox', { name: 'Buscar talentos' }).fill('conta')
+    await expect(page).toHaveURL(/q=conta/)
+    await expect(page.getByRole('link', { name: /ana lópez benítez/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /carlos giménez/i })).toBeHidden()
+    await expect(page.getByText('1 perfil', { exact: true })).toBeVisible()
+  })
+
+  test('buscar por ciudad con tilde o sin tilde da el mismo resultado', async ({ page }) => {
+    await page.goto('/?q=encarnacion')
+    await expect(page.getByRole('link', { name: /lucía duarte/i })).toBeVisible()
+    await page.goto('/?q=Encarnación')
+    await expect(page.getByRole('link', { name: /lucía duarte/i })).toBeVisible()
+  })
+
+  test('filtro rapido "Remoto" incluye a quienes aceptan cualquier modalidad', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Remoto' }).click()
+    await expect(page).toHaveURL(/modalidad=remote/)
+    await expect(page.getByRole('link', { name: /carlos giménez/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /diego ramírez/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /jorge ortiz/i })).toBeHidden()
+    await page.screenshot({ path: 'e2e/.screenshots/buscador-escritorio-1280.png', fullPage: true })
   })
 })

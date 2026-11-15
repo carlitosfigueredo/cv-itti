@@ -16,6 +16,15 @@ const i = (v) => ({ integerValue: String(v) })
 const t = (d) => ({ timestampValue: d.toISOString() })
 const arr = (xs) => ({ arrayValue: { values: xs.map(s) } })
 const norm = (x) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+const AREA = { finanzas: 'Finanzas y contabilidad', tecnologia: 'Tecnología', ventas: 'Ventas y comercial', rrhh: 'Recursos humanos', operaciones: 'Operaciones y logística' }
+
+// Copia simplificada de src/utils/searchTokens.ts (este script no puede importar TypeScript).
+function tokens(...texts) {
+  const words = [...new Set(texts.flatMap((t) => norm(t).split(/[^a-z0-9ñ]+/).filter((w) => w.length >= 2)))]
+  const out = new Set(words)
+  for (const w of words) for (let len = 2; len < Math.min(w.length, 20); len++) out.add(w.slice(0, len))
+  return [...out].slice(0, 300)
+}
 
 const people = [
   ['ana', 'Ana López Benítez', 'Contadora senior', 'finanzas', 'Asunción', 7, '5-9', ['Excel', 'Contabilidad', 'SAP', 'Impuestos', 'Power BI'], 'hybrid', 'available', true],
@@ -40,6 +49,7 @@ for (const [uid, name, headline, area, city, years, band, skills, workMode, avai
     experienceBand: s(band),
     skills: arr(skills),
     skillsNormalized: arr(skills.map(norm)),
+    searchTokens: arr(tokens(headline, ...skills, AREA[area], city, name)),
     workMode: s(workMode),
     availability: s(availability),
     isPublic: b(true),
