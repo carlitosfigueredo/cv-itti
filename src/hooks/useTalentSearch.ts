@@ -17,8 +17,10 @@ type State =
     }
 
 function logError(error: unknown) {
-  // Solo el nombre del error: nunca datos personales.
-  console.error('Fallo la busqueda de talentos', error instanceof Error ? error.name : 'error')
+  // Solo nombre y codigo del error (por ejemplo "failed-precondition" si falta un
+  // indice, o "permission-denied" por reglas): nunca datos personales.
+  const code = (error as { code?: string } | null)?.code ?? 'sin-codigo'
+  console.error('Fallo la busqueda de talentos', error instanceof Error ? error.name : 'error', code)
 }
 
 // Se usa con la key del componente = filtros actuales, asi cada busqueda nueva
