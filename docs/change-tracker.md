@@ -1,0 +1,15 @@
+# Change tracker
+
+| Fecha | Cambio | Motivo |
+|-------|--------|--------|
+| 2026-11-15 | Movidos requirements.md, design.md y tasks.md a `.kiro/specs/talent-platform/` | Kiro solo reconoce los Specs dentro de `.kiro/specs/<nombre>/` |
+| 2026-11-15 | Agregado flag "Afectado Grupo Vazquez?" (FR-037 a FR-040, modelo de datos, filtro, estadisticas admin, tareas) | Pedido del usuario: el sitio es para gente de ITTI y Grupo Vazquez que perdio su trabajo |
+| 2026-11-15 | Agregados FR-041 a FR-043 (eliminacion de cuenta, reportes, estadisticas admin), colecciones `reports` y `adminAudit` | Estaban en el brief pero no en los specs |
+| 2026-11-15 | Diagrama de arquitectura pasado de Mermaid a PlantUML | Preferencia de diagramas del usuario |
+| 2026-11-15 | Nuevas decisiones abiertas: modelo del flag, registro abierto o restringido, plan Blaze, idioma | Evitar asumir sin confirmar |
+| 2026-11-15 | CV siempre publico mientras el perfil este publicado (se elimina `cvPublic`); registro abierto a cualquier Google; UI en espanol; Blaze aprobado; retencion minima 1 anio; region mas barata (us-central1 propuesta) | Decisiones del usuario |
+| 2026-11-15 | Borrado el proyecto GCP `dev-nandecommerce` (recuperable 30 dias con `gcloud projects undelete`); creado el proyecto Firebase `cv-itti`; agregado `.firebaserc` | Pedido del usuario |
+| 2026-11-15 | Registrada la web app `cv-itti-web` en Firebase; creados `.env.local` (ignorado por git), `.env.example` y `.gitignore` | Conectar el frontend con Firebase |
+| 2026-11-15 | Vinculada la facturacion `[ID de facturacion omitido]` a `cv-itti`; creado presupuesto `cv-itti-5usd` (USD 5, alertas 50/90/100%); creados Firestore (default) y bucket de Storage por defecto en us-central1 | Pedido del usuario |
+| 2026-11-15 | Dos ambientes: `cv-itti-dev` (nuevo: facturacion, presupuesto USD 5, Firestore y Storage en us-central1, web app) y `cv-itti` como produccion. `.env.local` renombrado a `.env.prod.local`; creado `.env.dev.local`; alias en `.firebaserc` (default=dev) | Pedido del usuario: ambiente dev y prod separados |
+| 2026-11-15 | Fase 1: proyecto Vite + React + TS (strict) + MUI v6 + Router, tema, layout, componentes comunes, paginas placeholder, ESLint, Vitest, README. Node actualizado a LTS 26. TypeScript 6 (sin `baseUrl`) | Fase 1 del plan |
