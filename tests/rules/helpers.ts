@@ -8,6 +8,7 @@ export async function createEnv(): Promise<RulesTestEnvironment> {
   return initializeTestEnvironment({
     projectId: PROJECT_ID,
     firestore: { rules: readFileSync('firestore.rules', 'utf8') },
+    storage: { rules: readFileSync('storage.rules', 'utf8') },
   })
 }
 

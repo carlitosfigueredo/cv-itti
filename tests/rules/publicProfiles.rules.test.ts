@@ -1,5 +1,5 @@
 import { assertFails, assertSucceeds, type RulesTestEnvironment } from '@firebase/rules-unit-testing'
-import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, type Firestore } from 'firebase/firestore'
+import { collection, deleteDoc, deleteField, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, type Firestore } from 'firebase/firestore'
 import { baseProfile, createEnv, saveProfileBatch, seedProfile, seedUser } from './helpers'
 
 let env: RulesTestEnvironment
@@ -170,6 +170,52 @@ describe('publicProfiles: actualizacion y publicacion', () => {
 
   it('el admin no escribe perfiles desde el cliente (lo hace una Cloud Function)', async () => {
     await assertFails(updateDoc(doc(as('adm', { admin: true }), 'publicProfiles', 'u1'), { isPublic: false, updatedAt: serverTimestamp() }))
+  })
+})
+
+describe('publicProfiles: metadatos del CV', () => {
+  const cv = { cvPath: 'cvs/u1/cv.pdf', cvUpdatedAt: serverTimestamp(), cvSize: 1000 }
+
+  beforeEach(async () => {
+    await seedUser(env, 'u1')
+  })
+
+  it('acepta metadatos validos del CV', async () => {
+    await assertSucceeds(saveProfileBatch(as('u1'), 'u1', false, baseProfile('u1', cv)))
+  })
+
+  it.each([
+    ['ruta de otro usuario', { cvPath: 'cvs/u2/cv.pdf' }],
+    ['ruta arbitraria', { cvPath: 'cualquier/cosa.pdf' }],
+    ['tamano mayor a 5 MB', { cvSize: 5 * 1024 * 1024 + 1 }],
+    ['tamano cero', { cvSize: 0 }],
+    ['tamano no entero', { cvSize: 10.5 }],
+  ])('rechaza %s', async (_name, extra) => {
+    await assertFails(saveProfileBatch(as('u1'), 'u1', false, baseProfile('u1', { ...cv, ...extra })))
+  })
+
+  it('rechaza metadatos incompletos', async () => {
+    await assertFails(saveProfileBatch(as('u1'), 'u1', false, baseProfile('u1', { cvPath: 'cvs/u1/cv.pdf' })))
+    await assertFails(saveProfileBatch(as('u1'), 'u1', false, baseProfile('u1', { cvSize: 10, cvUpdatedAt: serverTimestamp() })))
+  })
+
+  it('el dueno puede agregar y luego quitar los metadatos', async () => {
+    await seedProfile(env, 'u1')
+    const db = as('u1')
+    await assertSucceeds(updateDoc(doc(db, 'publicProfiles', 'u1'), { ...cv, updatedAt: serverTimestamp() }))
+    await assertSucceeds(
+      updateDoc(doc(db, 'publicProfiles', 'u1'), {
+        cvPath: deleteField(),
+        cvUpdatedAt: deleteField(),
+        cvSize: deleteField(),
+        updatedAt: serverTimestamp(),
+      }),
+    )
+  })
+
+  it('otro usuario no puede agregar un CV al perfil ajeno', async () => {
+    await seedProfile(env, 'u1')
+    await assertFails(updateDoc(doc(as('u2'), 'publicProfiles', 'u1'), { ...cv, updatedAt: serverTimestamp() }))
   })
 })
 

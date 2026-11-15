@@ -16,7 +16,7 @@
     "test": "vitest --run",
     "dev:emu": "vite --mode emulators",
     "emulators": "firebase emulators:start --project demo-cv-itti",
-    "test:rules": "firebase emulators:exec --only firestore --project demo-cv-itti \"vitest --run --config vitest.rules.config.ts\""
+    "test:rules": "firebase emulators:exec --only firestore,storage --project demo-cv-itti \"vitest --run --config vitest.rules.config.ts\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
