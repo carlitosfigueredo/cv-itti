@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useIsMobile } from '@/hooks/useIsMobile'
@@ -113,7 +114,8 @@ export function PublicationCard({ profile, onChanged }: PublicationCardProps) {
                 {profile.affectedGrupoVazquezPublic ? ' (lo diste)' : ' (hoy no lo diste)'}.
               </li>
             </ul>
-            Podés despublicarlo cuando quieras.
+            Podés dejar de publicarlo cuando quieras. Más detalle en la{' '}
+            <Link component={RouterLink} to="/legal/privacidad">política de privacidad</Link>.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

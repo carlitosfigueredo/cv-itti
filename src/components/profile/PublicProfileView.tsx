@@ -13,6 +13,7 @@ import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { ReactNode } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import type { PublicProfile } from '@/types/profile'
 import {
   AREA_LABELS,
@@ -100,6 +101,10 @@ export function PublicProfileView({ profile, preview, onDownloadCv, downloadingC
                 >
                   Descargar CV
                 </Button>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                  Usá estos datos solo para procesos de selección.{' '}
+                  <Link component={RouterLink} to="/legal/terminos">Ver términos</Link>
+                </Typography>
               </Box>
             )}
             {cvError && <Alert severity="error">{cvError}</Alert>}

@@ -1,13 +1,14 @@
 import GoogleIcon from '@mui/icons-material/Google'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom'
 import { LoadingState } from '@/components/common/LoadingState'
 import { PageContainer } from '@/components/common/PageContainer'
 import { useAuth } from '@/hooks/useAuth'
@@ -55,6 +56,11 @@ export default function LoginPage() {
             >
               Continuar con Google
             </Button>
+            <Typography variant="body2" color="text.secondary">
+              Al continuar aceptás los{' '}
+              <Link component={RouterLink} to="/legal/terminos">Términos y condiciones</Link> y la{' '}
+              <Link component={RouterLink} to="/legal/privacidad">Política de privacidad y tratamiento de datos</Link>.
+            </Typography>
           </Stack>
         </CardContent>
       </Card>

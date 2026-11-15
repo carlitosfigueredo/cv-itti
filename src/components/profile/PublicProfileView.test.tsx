@@ -1,6 +1,14 @@
-import { render, screen } from '@testing-library/react'
+import { render as rtlRender, screen } from '@testing-library/react'
+import type { ReactElement } from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import { makeProfile } from '@/test/fixtures'
 import { PublicProfileView } from './PublicProfileView'
+
+const wrap = (ui: ReactElement) => <MemoryRouter>{ui}</MemoryRouter>
+const render = (ui: ReactElement) => {
+  const result = rtlRender(wrap(ui))
+  return { ...result, rerender: (next: ReactElement) => result.rerender(wrap(next)) }
+}
 
 describe('PublicProfileView', () => {
   it('muestra los datos basicos y las habilidades', () => {
@@ -15,7 +23,7 @@ describe('PublicProfileView', () => {
   it('no muestra contacto ni enlaces cuando no hay datos publicos', () => {
     render(<PublicProfileView profile={makeProfile()} />)
     expect(screen.queryByText(/enlaces y contacto/i)).not.toBeInTheDocument()
-    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.queryAllByRole('link')).toHaveLength(0)
   })
 
   it('muestra email y telefono solo si estan en el perfil', () => {
@@ -60,6 +68,7 @@ describe('PublicProfileView', () => {
     expect(screen.queryByRole('button', { name: /descargar cv/i })).not.toBeInTheDocument()
     rerender(<PublicProfileView profile={makeProfile({ cvPath: 'cvs/u1/cv.pdf' })} onDownloadCv={onDownload} />)
     expect(screen.getByRole('button', { name: /descargar cv/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Ver términos' })).toHaveAttribute('href', '/legal/terminos')
   })
 
   it('muestra el area propia cuando es "otro" y la vista previa de un perfil privado', () => {

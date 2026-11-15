@@ -1,7 +1,10 @@
 import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { Link as RouterLink } from 'react-router-dom'
+import { LEGAL_LINKS } from '@/config/legal'
 import { BrandLogo } from './BrandLogo'
 
 export function Footer() {
@@ -20,7 +23,14 @@ export function Footer() {
               Para la comunidad de ITTI y Grupo Vázquez.
             </Typography>
           </Box>
-          <Typography variant="body2" color="text.secondary">© {year} itti talentos</Typography>
+          <Stack spacing={1} sx={{ alignItems: { xs: 'flex-start', sm: 'flex-end' } }}>
+            <Box component="nav" aria-label="Textos legales" sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 2, rowGap: 0.5 }}>
+              {LEGAL_LINKS.map((l) => (
+                <Link key={l.to} component={RouterLink} to={l.to} variant="body2" color="text.secondary">{l.label}</Link>
+              ))}
+            </Box>
+            <Typography variant="body2" color="text.secondary">© {year} itti talentos</Typography>
+          </Stack>
         </Stack>
       </Container>
     </Box>
