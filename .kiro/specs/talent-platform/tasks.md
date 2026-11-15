@@ -148,17 +148,17 @@ public application routes and Firebase rules.
 
 ## Phase 7 --- Public talent directory and search
 
--   [ ] Build directory page and profile cards.
--   [ ] Implement filters for country, city, profession, skills,
+-   [x] Build directory page and profile cards.
+-   [x] Implement filters for country, city, profession, skills,
     experience, work mode, and availability as supported by Firestore.
--   [ ] Add optional Grupo Vazquez filter (public copy only).
--   [ ] Ensure every query filters for eligible public profiles.
--   [ ] Add page size limit (default 20).
--   [ ] Implement cursor pagination with `startAfter`.
--   [ ] Add required Firestore composite indexes.
--   [ ] Add loading, empty, and error states.
--   [ ] Add query tests and verify read patterns.
--   [ ] Document limitations of Firestore search and future
+-   [x] Add optional Grupo Vazquez filter (public copy only).
+-   [x] Ensure every query filters for eligible public profiles.
+-   [x] Add page size limit (default 20).
+-   [x] Implement cursor pagination with `startAfter`.
+-   [x] Add required Firestore composite indexes.
+-   [x] Add loading, empty, and error states.
+-   [x] Add query tests and verify read patterns.
+-   [x] Document limitations of Firestore search and future
     Algolia/Typesense option.
 
 **Exit criteria:** visitors can search and browse public profiles

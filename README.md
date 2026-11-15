@@ -31,4 +31,4 @@ Los archivos `.env.*.local` no se commitean. Usar `.env.example` como plantilla 
 
 ## Estado
 
-Fases 0 a 6 completas (base, Firebase, login, perfil, CV y publicación). Siguiente: Fase 7 (directorio y búsqueda). Ver `.kiro/specs/talent-platform/tasks.md` y `docs/change-tracker.md`.
+Fases 0 a 7 completas (base, Firebase, login, perfil, CV, publicación y directorio). Siguiente: Fase 8 (administración y moderación). Ver `.kiro/specs/talent-platform/tasks.md`, `docs/search.md` y `docs/change-tracker.md`.
