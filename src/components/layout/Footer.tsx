@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <Box component="footer" sx={{ py: 3, textAlign: 'center', borderTop: 1, borderColor: 'divider' }}>
       <Typography variant="body2" color="text.secondary">
-        Talent Platform - Comunidad ITTI y Grupo Vazquez
+        Talent Platform - Comunidad ITTI y Grupo Vázquez
       </Typography>
     </Box>
   )

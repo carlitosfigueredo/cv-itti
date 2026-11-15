@@ -8,10 +8,10 @@ export default function HomePage() {
   return (
     <PageContainer>
       <Stack spacing={3} sx={{ py: { xs: 4, md: 8 }, maxWidth: 720 }}>
-        <Typography variant="h1">Tu proximo trabajo empieza con un buen perfil</Typography>
+        <Typography variant="h1">Tu próximo trabajo empieza con un buen perfil</Typography>
         <Typography variant="h6" component="p" color="text.secondary">
-          Publica tu perfil y tu CV para que empresas y reclutadores encuentren a los profesionales
-          de ITTI y Grupo Vazquez.
+          Publicá tu perfil y tu CV para que empresas y reclutadores encuentren a los profesionales
+          de ITTI y Grupo Vázquez.
         </Typography>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <Button component={RouterLink} to="/login" variant="contained" size="large">Crear mi perfil</Button>

@@ -6,7 +6,7 @@ interface ErrorStateProps {
   onRetry?: () => void
 }
 
-export function ErrorState({ message = 'Ocurrio un error inesperado.', onRetry }: ErrorStateProps) {
+export function ErrorState({ message = 'Ocurrió un error inesperado.', onRetry }: ErrorStateProps) {
   return (
     <Alert
       severity="error"

@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const [failure, setFailure] = useState<AuthFailure | null>(null)
 
-  if (status === 'loading') return <LoadingState label="Verificando sesion" />
+  if (status === 'loading') return <LoadingState label="Verificando sesión" />
   if (status === 'authenticated') {
     const from = (location.state as { from?: unknown } | null)?.from
     return <Navigate to={safeRedirectPath(from)} replace />
@@ -41,7 +41,7 @@ export default function LoginPage() {
           <Stack spacing={3} sx={{ p: 1 }}>
             <Typography variant="h2" component="h1">Ingresar</Typography>
             <Typography color="text.secondary">
-              Usa tu cuenta de Google para crear tu perfil. Tu perfil y tu CV son privados hasta que
+              Usá tu cuenta de Google para crear tu perfil. Tu perfil y tu CV son privados hasta que
               decidas publicarlos.
             </Typography>
             {failure && (

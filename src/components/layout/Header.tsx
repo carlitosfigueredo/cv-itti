@@ -35,7 +35,7 @@ export function Header() {
         <Button component={RouterLink} to="/talentos" color="inherit">Talentos</Button>
         {status === 'authenticated' && user ? (
           <>
-            <IconButton onClick={(event) => setAnchor(event.currentTarget)} aria-label="Menu de usuario">
+            <IconButton onClick={(event) => setAnchor(event.currentTarget)} aria-label="Menú de usuario">
               <Avatar src={user.photoURL ?? undefined} alt="" sx={{ width: 32, height: 32 }}>
                 {(user.displayName ?? user.email ?? '?').charAt(0).toUpperCase()}
               </Avatar>
@@ -44,9 +44,9 @@ export function Header() {
               <MenuItem component={RouterLink} to="/dashboard" onClick={() => setAnchor(null)}>Mi panel</MenuItem>
               <MenuItem component={RouterLink} to="/perfil/editar" onClick={() => setAnchor(null)}>Editar perfil</MenuItem>
               {isAdmin && (
-                <MenuItem component={RouterLink} to="/admin" onClick={() => setAnchor(null)}>Administracion</MenuItem>
+                <MenuItem component={RouterLink} to="/admin" onClick={() => setAnchor(null)}>Administración</MenuItem>
               )}
-              <MenuItem onClick={handleSignOut}>Cerrar sesion</MenuItem>
+              <MenuItem onClick={handleSignOut}>Cerrar sesión</MenuItem>
             </Menu>
           </>
         ) : (

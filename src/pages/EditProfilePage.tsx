@@ -33,7 +33,7 @@ function EditProfileContent({ user }: { user: AuthUser }) {
       await save(formToProfileContent(values), values.affectedGrupoVazquez === 'yes')
       navigate('/dashboard')
     } catch {
-      setSubmitError('No se pudo guardar el perfil. Revisa tu conexion e intenta de nuevo.')
+      setSubmitError('No se pudo guardar el perfil. Revisá tu conexión e intentá de nuevo.')
     }
   }
 

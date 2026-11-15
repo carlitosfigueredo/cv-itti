@@ -27,9 +27,9 @@ function DashboardContent({ user }: { user: AuthUser }) {
       <Card>
         <CardContent>
           <Stack spacing={2} sx={{ p: 1 }}>
-            <Typography variant="h3" component="h2">Todavia no creaste tu perfil</Typography>
+            <Typography variant="h3" component="h2">Todavía no creaste tu perfil</Typography>
             <Typography color="text.secondary">
-              Completa tus datos profesionales. Tu perfil sera privado hasta que decidas publicarlo.
+              Completá tus datos profesionales. Tu perfil será privado hasta que decidas publicarlo.
             </Typography>
             <div>
               <Button component={RouterLink} to="/perfil/editar" variant="contained">Crear mi perfil</Button>
@@ -57,7 +57,7 @@ function DashboardContent({ user }: { user: AuthUser }) {
             </Typography>
             {!profile.isPublic && (
               <Alert severity="info">
-                Nadie puede ver tu perfil todavia. La opcion para publicarlo estara disponible pronto.
+                Nadie puede ver tu perfil todavía. La opción para publicarlo estará disponible pronto.
               </Alert>
             )}
             <div>
@@ -69,7 +69,7 @@ function DashboardContent({ user }: { user: AuthUser }) {
       <Card>
         <CardContent>
           <Typography variant="h3" component="h2" gutterBottom>Mi CV</Typography>
-          <Typography color="text.secondary">La carga de CV estara disponible pronto.</Typography>
+          <Typography color="text.secondary">La carga de CV estará disponible pronto.</Typography>
         </CardContent>
       </Card>
     </Stack>

@@ -7,7 +7,7 @@ describe('LoginPage', () => {
   it('muestra el mensaje cuando el usuario cancela', async () => {
     const signIn = vi.fn().mockResolvedValue({
       ok: false,
-      failure: { kind: 'cancelled', message: 'Cancelaste el inicio de sesion.' },
+      failure: { kind: 'cancelled', message: 'Cancelaste el inicio de sesión.' },
     })
     renderWithAuth(<LoginPage />, { ...anonymous, signIn })
     await userEvent.click(screen.getByRole('button', { name: /continuar con google/i }))
@@ -18,10 +18,10 @@ describe('LoginPage', () => {
   it('muestra error cuando falla el proveedor', async () => {
     const signIn = vi.fn().mockResolvedValue({
       ok: false,
-      failure: { kind: 'unknown', message: 'No se pudo iniciar sesion.' },
+      failure: { kind: 'unknown', message: 'No se pudo iniciar sesión.' },
     })
     renderWithAuth(<LoginPage />, { ...anonymous, signIn })
     await userEvent.click(screen.getByRole('button', { name: /continuar con google/i }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('No se pudo iniciar sesion.')
+    expect(await screen.findByRole('alert')).toHaveTextContent('No se pudo iniciar sesión.')
   })
 })

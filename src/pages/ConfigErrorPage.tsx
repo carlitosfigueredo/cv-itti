@@ -5,9 +5,9 @@ import { PageContainer } from '@/components/common/PageContainer'
 
 export default function ConfigErrorPage({ errors }: { errors: string[] }) {
   return (
-    <PageContainer title="Falta configuracion" maxWidth="md">
+    <PageContainer title="Falta configuración" maxWidth="md">
       <Alert severity="error">
-        <AlertTitle>No se pudo iniciar la aplicacion</AlertTitle>
+        <AlertTitle>No se pudo iniciar la aplicación</AlertTitle>
         <Typography component="ul" sx={{ pl: 2, m: 0 }}>
           {errors.map((error) => (
             <li key={error}>{error}</li>
@@ -15,7 +15,7 @@ export default function ConfigErrorPage({ errors }: { errors: string[] }) {
         </Typography>
       </Alert>
       <Typography sx={{ mt: 2 }} color="text.secondary">
-        Copia .env.example a .env.dev.local y completa los valores. Mas detalle en docs/firebase-setup.md.
+        Copiá .env.example a .env.dev.local y completá los valores. Más detalle en docs/firebase-setup.md.
       </Typography>
     </PageContainer>
   )
