@@ -68,3 +68,34 @@ La primera ejecucion descarga los JAR de los emuladores. Las reglas de `firestor
 ## Validacion de configuracion
 
 Si falta alguna variable `VITE_FIREBASE_*`, la app muestra una pantalla con la lista de variables faltantes en vez de arrancar.
+
+## CV: Storage, CORS y Cloud Function
+
+### Descarga desde el navegador (CORS)
+
+La descarga usa el SDK (`getBlob`), no URLs con token, por lo que el bucket necesita CORS.
+
+```bash
+gcloud storage buckets update gs://cv-itti-dev.firebasestorage.app --cors-file=storage.cors.dev.json
+gcloud storage buckets update gs://cv-itti.firebasestorage.app --cors-file=storage.cors.prod.json
+```
+
+Si se usa un dominio propio en produccion, agregarlo a `storage.cors.prod.json` antes de aplicarlo.
+
+### Desplegar reglas de Storage
+
+```bash
+firebase deploy --only storage --project dev
+```
+
+La primera vez, la CLI pide otorgar al servicio de Storage el rol de lectura de Firestore (las reglas consultan `publicProfiles` y `users`). Aceptarlo.
+
+### Validacion de contenido del PDF (Cloud Function `validate### Validacion de contenido del PDF (Cloud Function `validate### Validacion de contenido del PDF (Cloud Function `validate### Validacion de contenido del PDF (Cloud Function `validate### Validacamano no cumplen), borra el archivo y quita los metadatos del perfil.
+
+```bash
+firebase deploy --only functions --project dev
+```
+
+Requiere plan Blaze y Node 22 (runtime de la funcion). Region `us-central1`, igual que el bucket. La primera vez Firebase habilita las APIs necesarias (puede tardar unos minutos).
+
+Limitacion conocida: si la funcion rechaza un archivo antes de que el cliente registre los metadatos, podria quedar un `cvPath` sin archivo. La descarga fallaria con un error claro y el usuario puede volver a subir el CV.

@@ -21,7 +21,7 @@ Los archivos `.env.*.local` no se commitean. Usar `.env.example` como plantilla 
 ## Scripts
 
 - `npm run dev`: servidor local (modo dev).
-- `npm run lint`, `npm run typecheck`, `npm test`: validaciones.
+- `npm run lint`, `npm run typecheck` (incluye `functions/`), `npm test`: validaciones.
 - `npm run test:rules`: pruebas de reglas de Firestore con el emulador (requiere Java).
 - `npm run build`: build de produccion. `npm run build:dev`: build apuntando a dev.
 
@@ -31,4 +31,4 @@ Los archivos `.env.*.local` no se commitean. Usar `.env.example` como plantilla 
 
 ## Estado
 
-Fases 0 a 4 completas (base, Firebase, login y perfil). Siguiente: Fase 5 (CV). Ver `.kiro/specs/talent-platform/tasks.md` y `docs/change-tracker.md`.
+Fases 0 a 5 completas (base, Firebase, login, perfil y CV). Siguiente: Fase 6 (publicación y perfil público). Ver `.kiro/specs/talent-platform/tasks.md` y `docs/change-tracker.md`.

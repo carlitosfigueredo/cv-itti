@@ -113,17 +113,17 @@ profile without exposing private account fields.
 
 ## Phase 5 --- CV upload and lifecycle
 
--   [ ] Implement PDF selection and client-side size/type checks.
--   [ ] Enforce 5 MB maximum.
--   [ ] Upload to `cvs/{uid}/cv.pdf`.
--   [ ] Display upload progress and errors.
--   [ ] Support replacement and deletion.
--   [ ] Update CV metadata consistently.
--   [ ] Prevent users from accessing another user's upload operations.
--   [ ] Decide and implement trusted binary validation before
+-   [x] Implement PDF selection and client-side size/type checks.
+-   [x] Enforce 5 MB maximum.
+-   [x] Upload to `cvs/{uid}/cv.pdf`.
+-   [x] Display upload progress and errors.
+-   [x] Support replacement and deletion.
+-   [x] Update CV metadata consistently.
+-   [x] Prevent users from accessing another user's upload operations.
+-   [x] Decide and implement trusted binary validation before
     production.
--   [ ] Avoid permanent public download-token URLs.
--   [ ] Add Storage Emulator tests for owner/non-owner access and
+-   [x] Avoid permanent public download-token URLs.
+-   [x] Add Storage Emulator tests for owner/non-owner access and
     size/type constraints.
 
 **Exit criteria:** owner can upload, replace, and delete their current
