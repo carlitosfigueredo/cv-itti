@@ -172,5 +172,13 @@ service cloud.firestore {
       allow get, list: if isAdmin();
       allow update, delete: if false;
     }
+
+    // ----------------------------------------------------------- adminAudit
+    // Lo escriben solo las Cloud Functions y el script de administracion (Admin SDK).
+    // Se conserva al menos 1 anio (ver docs/administracion.md).
+    match /adminAudit/{eventId} {
+      allow get, list: if isAdmin();
+      allow create, update, delete: if false;
+    }
   }
 }
