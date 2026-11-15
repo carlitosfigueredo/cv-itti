@@ -1,5 +1,5 @@
 import { assertFails, assertSucceeds, type RulesTestEnvironment } from '@firebase/rules-unit-testing'
-import { collection, deleteDoc, deleteField, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, type Firestore } from 'firebase/firestore'
+import { collection, deleteDoc, deleteField, doc, getDoc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, updateDoc, where, type Firestore } from 'firebase/firestore'
 import { baseProfile, createEnv, saveProfileBatch, seedProfile, seedUser } from './helpers'
 
 let env: RulesTestEnvironment
@@ -245,6 +245,45 @@ describe('publicProfiles: ciclo de publicacion', () => {
 
   it('el consentimiento de contacto no se puede saltar al publicar', async () => {
     await assertFails(updateDoc(doc(as('u1'), 'publicProfiles', 'u1'), { isPublic: true, publicEmail: 'a@b.com', updatedAt: serverTimestamp() }))
+  })
+})
+
+describe('publicProfiles: consultas del directorio', () => {
+  beforeEach(async () => {
+    await seedProfile(env, 'p1', { isPublic: true, area: 'finanzas', workMode: 'remote', skills: ['Excel'], skillsNormalized: ['excel'] })
+    await seedProfile(env, 'p2', { isPublic: true, area: 'tecnologia', workMode: 'any' })
+    await seedProfile(env, 'priv', { isPublic: false, area: 'finanzas', workMode: 'remote', skillsNormalized: ['excel'] })
+  })
+
+  const col = () => collection(anon(), 'publicProfiles')
+
+  it('la consulta completa del directorio es aceptada para un anonimo', async () => {
+    const q = query(
+      col(),
+      where('isPublic', '==', true),
+      where('area', '==', 'finanzas'),
+      where('workMode', 'in', ['remote', 'any']),
+      where('skillsNormalized', 'array-contains', 'excel'),
+      orderBy('updatedAt', 'desc'),
+      limit(21),
+    )
+    const snap = await assertSucceeds(getDocs(q))
+    expect(snap.docs.map((d) => d.id)).toEqual(['p1'])
+  })
+
+  it('un perfil privado nunca aparece, aunque coincida con todos los filtros', async () => {
+    const q = query(col(), where('isPublic', '==', true), where('area', '==', 'finanzas'), orderBy('updatedAt', 'desc'))
+    const snap = await assertSucceeds(getDocs(q))
+    expect(snap.docs.map((d) => d.id)).not.toContain('priv')
+  })
+
+  it('una consulta sin isPublic == true es rechazada aunque tenga otros filtros', async () => {
+    await assertFails(getDocs(query(col(), where('area', '==', 'finanzas'), orderBy('updatedAt', 'desc'), limit(21))))
+    await assertFails(getDocs(query(col(), where('skillsNormalized', 'array-contains', 'excel'))))
+  })
+
+  it('no se puede listar perfiles privados ni con la sesion de otro usuario', async () => {
+    await assertFails(getDocs(query(collection(as('otro'), 'publicProfiles'), where('isPublic', '==', false))))
   })
 })
 
