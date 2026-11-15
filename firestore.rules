@@ -1,11 +1,140 @@
 rules_version = '2';
 
-// Reglas cerradas por defecto (Fase 2). Las reglas reales por coleccion
-// se agregan en las fases 4 a 9. No desplegar reglas permisivas.
+// Reglas de Firestore (Fase 4). Todo lo no declarado queda denegado.
+// Notas:
+// - Las operaciones privilegiadas (suspender, claims de admin, borrado de cuenta,
+//   moderacion) las hace codigo de confianza con Admin SDK, que no pasa por reglas.
+// - Las reglas no tienen bucles: no pueden validar cada elemento de los arrays
+//   skills/skillsNormalized. Solo se valida tipo y cantidad. El contenido de cada
+//   elemento lo valida el frontend (Zod) y queda como riesgo residual de moderacion.
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function userPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function isActiveUser(uid) {
+      return exists(userPath(uid)) && get(userPath(uid)).data.accountStatus == 'active';
+    }
+
+    function isStr(v, minLen, maxLen) {
+      return v is string && v.size() >= minLen && v.size() <= maxLen;
+    }
+
+    function isHttpsUrl(v) {
+      return isStr(v, 12, 200) && v.matches('^https://[^\\s]+$');
+    }
+
+    // ---------------------------------------------------------------- users
+    function validUserCreate(d) {
+      return d.keys().hasOnly(['uid', 'email', 'displayName', 'affectedGrupoVazquez', 'accountStatus', 'createdAt', 'updatedAt'])
+        && d.keys().hasAll(['uid', 'email', 'displayName', 'affectedGrupoVazquez', 'accountStatus', 'createdAt', 'updatedAt'])
+        && d.uid == request.auth.uid
+        && d.email == request.auth.token.email
+        && isStr(d.displayName, 0, 120)
+        && d.affectedGrupoVazquez == null
+        && d.accountStatus == 'active'
+        && d.createdAt == request.time
+        && d.updatedAt == request.time;
+    }
+
+    function validUserUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['affectedGrupoVazquez', 'updatedAt'])
+        && resource.data.accountStatus == 'active'
+        && request.resource.data.affectedGrupoVazquez is bool
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isOwner(uid) && validUserCreate(request.resource.data);
+      allow update: if isOwner(uid) && validUserUpdate();
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------- publicProfiles
+    function validProfile(uid, d) {
+      return d.keys().hasOnly([
+          'uid', 'displayName', 'headline', 'area', 'areaOther', 'country', 'city', 'cityNormalized',
+          'summary', 'experienceYears', 'experienceBand', 'skills', 'skillsNormalized', 'workMode',
+          'availability', 'linkedin', 'github', 'portfolio', 'isPublic', 'contactEmailPublic',
+          'publicEmail', 'contactPhonePublic', 'publicPhone', 'affectedGrupoVazquezPublic',
+          'affectedGrupoVazquez', 'createdAt', 'updatedAt'
+        ])
+        && d.keys().hasAll([
+          'uid', 'displayName', 'headline', 'area', 'country', 'city', 'cityNormalized',
+          'experienceYears', 'experienceBand', 'skills', 'skillsNormalized', 'workMode',
+          'availability', 'isPublic', 'contactEmailPublic', 'contactPhonePublic',
+          'affectedGrupoVazquezPublic', 'createdAt', 'updatedAt'
+        ])
+        && d.uid == uid
+        && isStr(d.displayName, 2, 80)
+        && isStr(d.headline, 3, 80)
+        && d.area in ['tecnologia', 'finanzas', 'ventas', 'administracion', 'operaciones', 'rrhh', 'marketing', 'legal', 'atencion_cliente', 'otro']
+        && (d.area == 'otro') == ('areaOther' in d)
+        && (!('areaOther' in d) || isStr(d.areaOther, 2, 40))
+        && d.country in ['PY', 'AR', 'BR', 'UY', 'CL', 'BO', 'PE', 'CO', 'EC', 'VE', 'MX', 'US', 'ES', 'OTHER']
+        && isStr(d.city, 2, 60)
+        && isStr(d.cityNormalized, 2, 60)
+        && d.cityNormalized == d.cityNormalized.lower()
+        && (!('summary' in d) || isStr(d.summary, 1, 1000))
+        && d.experienceYears is int && d.experienceYears >= 0 && d.experienceYears <= 50
+        && ((d.experienceYears <= 1 && d.experienceBand == '0-1')
+          || (d.experienceYears >= 2 && d.experienceYears <= 4 && d.experienceBand == '2-4')
+          || (d.experienceYears >= 5 && d.experienceYears <= 9 && d.experienceBand == '5-9')
+          || (d.experienceYears >= 10 && d.experienceBand == '10+'))
+        && d.skills is list && d.skills.size() <= 15
+        && d.skillsNormalized is list && d.skillsNormalized.size() == d.skills.size()
+        && d.workMode in ['remote', 'hybrid', 'onsite', 'any']
+        && d.availability in ['available', 'not_available']
+        && (!('linkedin' in d) || isHttpsUrl(d.linkedin))
+        && (!('github' in d) || isHttpsUrl(d.github))
+        && (!('portfolio' in d) || isHttpsUrl(d.portfolio))
+        && d.isPublic is bool
+        && d.contactEmailPublic is bool
+        && ('publicEmail' in d) == d.contactEmailPublic
+        && (!('publicEmail' in d) || (isStr(d.publicEmail, 5, 120) && d.publicEmail.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')))
+        && d.contactPhonePublic is bool
+        && ('publicPhone' in d) == d.contactPhonePublic
+        && (!('publicPhone' in d) || (isStr(d.publicPhone, 6, 20) && d.publicPhone.matches('^\\+?[0-9 ()-]{6,20}$')))
+        && d.affectedGrupoVazquezPublic is bool
+        && ('affectedGrupoVazquez' in d) == d.affectedGrupoVazquezPublic
+        // El valor publico debe coincidir con el valor privado que se guarda en el mismo batch.
+        && (!('affectedGrupoVazquez' in d)
+          || d.affectedGrupoVazquez == getAfter(userPath(uid)).data.affectedGrupoVazquez)
+        // Publicar exige haber respondido la pregunta de Grupo Vazquez.
+        && (d.isPublic == false || getAfter(userPath(uid)).data.affectedGrupoVazquez is bool)
+        && d.updatedAt == request.time;
+    }
+
+    match /publicProfiles/{uid} {
+      allow get: if isOwner(uid) || isAdmin() || resource.data.isPublic == true;
+      // Las consultas deben incluir where('isPublic', '==', true) para ser aceptadas.
+      allow list: if isAdmin() || resource.data.isPublic == true;
+      allow create: if isOwner(uid)
+        && isActiveUser(uid)
+        && validProfile(uid, request.resource.data)
+        && request.resource.data.isPublic == false
+        && request.resource.data.createdAt == request.time;
+      allow update: if isOwner(uid)
+        && isActiveUser(uid)
+        && validProfile(uid, request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
     }
   }
 }
