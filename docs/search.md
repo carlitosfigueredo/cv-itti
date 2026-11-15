@@ -4,22 +4,33 @@
 
 `/talentos` consulta `publicProfiles` con Firestore. Toda consulta incluye `isPublic == true` (las reglas rechazan listados que no lo incluyan), ordena por `updatedAt` descendente y pagina de a 20 con cursor (`startAfter`). Se piden 21 documentos: el extra solo indica si hay otra página.
 
-El estado de la búsqueda vive en la URL (`/talentos?area=finanzas&pais=PY&...`), así que los enlaces se pueden compartir y el botón "atrás" funciona. Los valores inválidos de la URL se ignoran.
+El estado de la búsqueda vive en la URL (`/?q=contadora&area=finanzas&...`; los enlaces viejos a `/talentos?...` redirigen), así que los enlaces se pueden compartir y el botón "atrás" funciona. Los valores inválidos de la URL se ignoran.
 
 | Filtro | Parámetro URL | Campo de Firestore | Tipo de condición |
 |--------|---------------|--------------------|-------------------|
+| Caja de búsqueda | `q` | `searchTokens` | `array-contains` (primera palabra, sin tildes, en minúsculas) |
 | Área | `area` | `area` | `==` |
 | País | `pais` | `country` | `==` |
 | Ciudad | `ciudad` | `cityNormalized` | `==` (texto sin tildes, en minúsculas) |
 | Experiencia | `experiencia` | `experienceBand` | `==` (0-1, 2-4, 5-9, 10+) |
 | Modalidad | `modalidad` | `workMode` | `in [modalidad, 'any']` |
 | Disponibilidad | `disponibilidad` | `availability` | `==` |
-| Habilidad | `habilidad` | `skillsNormalized` | `array-contains` |
-| Grupo Vázquez | `grupo-vazquez=1` | `affectedGrupoVazquez` | `== true` (solo la copia pública con consentimiento) |
+
+Los filtros se aplican al instante. La caja de búsqueda espera 450 ms después de la última tecla para no hacer una consulta por letra. "Disponibles" y "Remoto" son filtros rápidos de un toque. El resto vive en el panel "Más filtros" (a la derecha en escritorio, desde abajo en celular).
+
+No hay filtro por Grupo Vázquez en el directorio: la plataforma está pensada para esa comunidad, así que no aporta. El dato sigue en el perfil y en las estadísticas de administración.
+
+### Palabras clave (`searchTokens`)
+
+Al guardar el perfil, el cliente genera `searchTokens` (`src/utils/searchTokens.ts`) con las palabras del titular, las habilidades, el área, la ciudad y el nombre, más sus comienzos desde 2 letras ("co", "con", ..., "contadora"). Máximo 300 elementos, validado en las reglas.
+
+- Se busca **una palabra a la vez** (la primera que se escribe). La interfaz lo avisa si se escriben más.
+- Los perfiles guardados antes de este cambio no tienen `searchTokens`: no aparecen en búsquedas por texto (sí con los demás filtros) hasta que su dueño vuelva a guardar el perfil.
+- Las reglas no pueden verificar que las palabras correspondan al perfil. Si alguien infla sus palabras clave para aparecer en más búsquedas, se modera con reportes.
 
 ## Índices
 
-`firestore.indexes.json` define un índice compuesto `(campo, updatedAt desc)` por cada filtro, más `(skillsNormalized array-contains, updatedAt desc)`. Firestore combina (index merging) esos índices para las consultas con varios filtros de igualdad más orden, así que no hace falta un índice por cada combinación posible.
+`firestore.indexes.json` define un índice compuesto `(campo, updatedAt desc)` por cada filtro, más `(searchTokens array-contains, updatedAt desc)`. Firestore combina (index merging) esos índices para las consultas con varios filtros de igualdad más orden, así que no hace falta un índice por cada combinación posible.
 
 Los emuladores no exigen índices: el primer uso real contra Firebase puede fallar con un enlace para crear un índice faltante. Desplegar los índices antes de probar:
 
@@ -31,8 +42,8 @@ Los índices tardan unos minutos en construirse. Si una combinación de filtros 
 
 ## Limitaciones de Firestore como buscador
 
-- **No hay búsqueda de texto libre.** No se puede buscar "contadora" dentro del titular o del resumen. Los filtros son valores exactos.
-- **Una sola habilidad por consulta.** Firestore admite un único `array-contains` por consulta.
+- **Búsqueda por palabras clave, no de texto libre.** Se encuentra una palabra o su comienzo; no se busca dentro del resumen ni frases completas.
+- **Una sola palabra por consulta.** Firestore admite un único `array-contains` por consulta.
 - **Sin tolerancia a errores de tipeo ni orden por relevancia.** La ciudad debe coincidir después de normalizar tildes y mayúsculas.
 - **Orden fijo** por última actualización del perfil (incluye subir un CV).
 - **Costo de lectura:** cada página cuesta hasta 21 lecturas. Con ~3.000 usuarios es bajo, pero conviene monitorearlo.
