@@ -199,7 +199,7 @@ interface Report {
   profileUid: string;
   reason: "inappropriate" | "false_information" | "spam" | "other";
   comment?: string; // max length enforced in rules
-  reporterUid: string | null; // null when anonymous
+  reporterUid: string; // login required; document id is {profileUid}_{reporterUid}
   status: "open" | "resolved" | "dismissed";
   createdAt: Timestamp;
 }
@@ -211,8 +211,8 @@ interface AdminAuditEvent {
 }
 ```
 
-Reports: create allowed to anyone (App Check enforced, rate-limited in a
-function if abuse appears), read/update admin only. Audit events are
+Reports: create allowed to signed-in users, one per profile (composite
+document id), read admin only; resolution done by trusted code. Audit events are
 written only by Cloud Functions and are read-only for admins.
 
 Admin statistics: use Firestore aggregation queries (`count()`) from an

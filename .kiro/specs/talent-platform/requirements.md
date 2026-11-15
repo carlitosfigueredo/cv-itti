@@ -192,9 +192,10 @@ introducing unnecessary infrastructure.
     account. The request shall be processed by trusted backend code that
     removes `users/{uid}`, `publicProfiles/{uid}`, `cvs/{uid}/cv.pdf`,
     and the Authentication user.
--   **FR-042:** Visitors/recruiters shall be able to report a public
-    profile as inappropriate. Reports are stored in a collection that
-    only administrators can read.
+-   **FR-042:** Signed-in users (any Google account) shall be able to
+    report a public profile as inappropriate, once per profile. Anonymous
+    reporting is not allowed to limit spam. Reports are stored in a
+    collection that only administrators can read.
 -   **FR-043:** Administrators shall be able to view statistics (total
     users, published profiles, profiles with CV, flag counts, pending
     reports), suspend accounts, unpublish profiles, and resolve reports.

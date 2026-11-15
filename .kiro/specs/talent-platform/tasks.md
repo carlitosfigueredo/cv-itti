@@ -131,17 +131,17 @@ CV; unauthorized access is denied.
 
 ## Phase 6 --- Publication, consent, and public profile
 
--   [ ] Add explicit profile publication toggle, default off.
--   [ ] Add separate email and phone publication consent.
--   [ ] Show clear notice that the CV is public while the profile is published (no separate toggle).
--   [ ] Ensure public profile contains only consented public fields
+-   [x] Add explicit profile publication toggle, default off.
+-   [x] Add separate email and phone publication consent.
+-   [x] Show clear notice that the CV is public while the profile is published (no separate toggle).
+-   [x] Ensure public profile contains only consented public fields
     (including the Grupo Vazquez flag).
--   [ ] Add "report profile" action on the public profile.
--   [ ] Implement public profile route.
--   [ ] Implement public CV download behavior only when allowed.
--   [ ] Implement unpublish behavior and verify future access is denied.
--   [ ] Explain that already-downloaded files cannot be recalled.
--   [ ] Test private, published, unpublished, and suspended states.
+-   [x] Add "report profile" action on the public profile.
+-   [x] Implement public profile route.
+-   [x] Implement public CV download behavior only when allowed.
+-   [x] Implement unpublish behavior and verify future access is denied.
+-   [x] Explain that already-downloaded files cannot be recalled.
+-   [x] Test private, published, unpublished, and suspended states.
 
 **Exit criteria:** only explicitly published data is accessible through
 public application routes and Firebase rules.
