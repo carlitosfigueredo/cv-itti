@@ -24,14 +24,14 @@ describe('TalentResults', () => {
     expect(screen.getByRole('status', { name: /cargando/i })).toBeInTheDocument()
     expect(await screen.findByText('Ana Perez')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /beto gomez/i })).toHaveAttribute('href', '/talentos/b')
-    expect(screen.getByText(/mostrando 2 perfiles/i)).toBeInTheDocument()
+    expect(screen.getByText('2 perfiles')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /ver más/i })).not.toBeInTheDocument()
   })
 
   it('pasa los filtros a la busqueda', async () => {
     service.searchProfiles.mockResolvedValue({ profiles: [], cursor: null, hasMore: false })
     setup({ area: 'finanzas', country: 'PY' })
-    await screen.findByText(/no encontramos perfiles/i)
+    await screen.findByText('Nadie coincide con estos filtros')
     expect(service.searchProfiles).toHaveBeenCalledWith({ area: 'finanzas', country: 'PY' })
   })
 

@@ -1,14 +1,18 @@
 import SearchIcon from '@mui/icons-material/Search'
+import TuneIcon from '@mui/icons-material/Tune'
 import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Checkbox from '@mui/material/Checkbox'
+import Collapse from '@mui/material/Collapse'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useState, type FormEvent } from 'react'
 import {
   AREAS,
@@ -43,6 +47,12 @@ const WORK_MODE_OPTIONS = WORK_MODES.filter((m) => m !== 'any')
 export function DirectoryFilters({ filters, onApply }: DirectoryFiltersProps) {
   // Estado local: la busqueda se aplica al enviar el formulario (boton o Enter).
   const [draft, setDraft] = useState<Filters>(filters)
+  const theme = useTheme()
+  const compact = useMediaQuery(theme.breakpoints.down('md'))
+  const activeCount = Object.keys(filters).length
+  // En pantallas chicas los filtros arrancan plegados para mostrar primero los talentos.
+  const [expanded, setExpanded] = useState(activeCount > 0)
+  const showFields = !compact || expanded
 
   const set = <K extends keyof Filters>(key: K, value: Filters[K] | undefined) =>
     setDraft((current) => {
@@ -64,8 +74,23 @@ export function DirectoryFilters({ filters, onApply }: DirectoryFiltersProps) {
 
   return (
     <Card component="section" aria-label="Filtros de búsqueda">
-      <CardContent>
-        <Box component="form" onSubmit={handleSubmit} noValidate>
+      <CardContent sx={{ p: { xs: 2, sm: 2.5 }, '&:last-child': { pb: { xs: 2, sm: 2.5 } } }}>
+        {compact && (
+          <Button
+            fullWidth
+            color="inherit"
+            startIcon={<TuneIcon />}
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            aria-controls="filtros-campos"
+            sx={{ justifyContent: 'flex-start' }}
+          >
+            {expanded ? 'Ocultar filtros' : 'Filtrar talentos'}
+            {activeCount > 0 ? ` (${activeCount} ${activeCount === 1 ? 'activo' : 'activos'})` : ''}
+          </Button>
+        )}
+        <Collapse in={showFields} timeout="auto" id="filtros-campos">
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ pt: compact ? 2 : 0 }}>
           <Stack spacing={2}>
             <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' } }}>
               <TextField
@@ -162,14 +187,18 @@ export function DirectoryFilters({ filters, onApply }: DirectoryFiltersProps) {
                 />
               }
               label="Solo personas afectadas por Grupo Vázquez (que eligieron mostrarlo)"
+              sx={{ alignItems: 'flex-start', '& .MuiCheckbox-root': { pt: 0.5 } }}
             />
 
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-              <Button type="submit" variant="contained" startIcon={<SearchIcon />}>Buscar</Button>
-              <Button type="button" variant="text" onClick={handleClear}>Limpiar filtros</Button>
+              <Button type="submit" variant="contained" startIcon={<SearchIcon />} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+                Buscar
+              </Button>
+              <Button type="button" variant="text" color="inherit" onClick={handleClear}>Limpiar filtros</Button>
             </Stack>
           </Stack>
         </Box>
+        </Collapse>
       </CardContent>
     </Card>
   )

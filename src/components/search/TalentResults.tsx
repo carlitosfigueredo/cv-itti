@@ -10,14 +10,15 @@ import { useTalentSearch } from '@/hooks/useTalentSearch'
 import type { DirectoryFilters } from '@/types/search'
 import { TalentCard } from './TalentCard'
 
-const grid = { display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' } }
+const grid = { display: 'grid', gap: 2, gridTemplateColumns: { xs: 'minmax(0, 1fr)', sm: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(3, minmax(0, 1fr))' } }
 
 interface TalentResultsProps {
   filters: DirectoryFilters
+  hasFilters?: boolean
   onClear: () => void
 }
 
-export function TalentResults({ filters, onClear }: TalentResultsProps) {
+export function TalentResults({ filters, hasFilters = true, onClear }: TalentResultsProps) {
   const { state, retry, loadMore } = useTalentSearch(filters)
 
   if (state.status === 'loading') {
@@ -35,26 +36,31 @@ export function TalentResults({ filters, onClear }: TalentResultsProps) {
   }
 
   if (state.profiles.length === 0) {
-    return (
+    return hasFilters ? (
       <EmptyState
-        title="No encontramos perfiles"
-        description="Probá con menos filtros o con otros valores."
+        title="Nadie coincide con estos filtros"
+        description="Probá sacando alguno o buscando con otros valores."
         action={<Button variant="outlined" onClick={onClear}>Limpiar filtros</Button>}
+      />
+    ) : (
+      <EmptyState
+        title="Todavía no hay perfiles publicados"
+        description="Sé de las primeras personas en sumarse: cargá tu CV y publicá tu perfil."
       />
     )
   }
 
   return (
     <Stack spacing={3}>
-      <Typography role="status" color="text.secondary">
-        Mostrando {state.profiles.length} {state.profiles.length === 1 ? 'perfil' : 'perfiles'}
-        {state.hasMore ? ' (hay más)' : ''}
+      <Typography role="status" variant="body2" color="text.secondary">
+        {state.hasMore ? 'Mostrando los primeros ' : ''}
+        {state.profiles.length} {state.profiles.length === 1 ? 'perfil' : 'perfiles'}
       </Typography>
       <Box component="ul" sx={{ ...grid, listStyle: 'none', p: 0, m: 0 }}>
         {state.profiles.map((profile) => (
-          <li key={profile.uid}>
+          <Box component="li" key={profile.uid} sx={{ minWidth: 0 }}>
             <TalentCard profile={profile} />
-          </li>
+          </Box>
         ))}
       </Box>
       {state.moreError && <ErrorState message="No se pudieron cargar más perfiles." onRetry={loadMore} />}
@@ -62,7 +68,9 @@ export function TalentResults({ filters, onClear }: TalentResultsProps) {
         <Box sx={{ textAlign: 'center' }}>
           <Button
             variant="outlined"
+            color="inherit"
             onClick={loadMore}
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
             disabled={state.loadingMore}
             startIcon={state.loadingMore ? <CircularProgress size={18} color="inherit" /> : undefined}
           >
