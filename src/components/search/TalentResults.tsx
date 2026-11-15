@@ -39,13 +39,13 @@ export function TalentResults({ filters, hasFilters = true, onClear }: TalentRes
     return hasFilters ? (
       <EmptyState
         title="Nadie coincide con estos filtros"
-        description="Probá sacando alguno o buscando con otros valores."
+        description="Probá con otra palabra o sacá algún filtro."
         action={<Button variant="outlined" onClick={onClear}>Limpiar filtros</Button>}
       />
     ) : (
       <EmptyState
         title="Todavía no hay perfiles publicados"
-        description="Sé de las primeras personas en sumarse: cargá tu CV y publicá tu perfil."
+        description="Sé de las primeras personas en sumarse: tocá “Cargar mi CV” arriba."
       />
     )
   }

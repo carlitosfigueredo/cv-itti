@@ -4,30 +4,31 @@ import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { filtersToParams, parseFilters } from '@/services/search.filters'
 import type { DirectoryFilters as Filters } from '@/types/search'
-import { DirectoryFilters } from './DirectoryFilters'
+import { DirectoryFilters, type ApplyOptions } from './DirectoryFilters'
 import { TalentResults } from './TalentResults'
 
 // Directorio con filtros guardados en la URL (se puede compartir el enlace).
+// Los filtros se aplican al instante; la caja de texto espera a que se deje de escribir.
 export function TalentDirectory() {
   const [searchParams, setSearchParams] = useSearchParams()
   const filters = useMemo(() => parseFilters(searchParams), [searchParams])
-  // Cambia con cada busqueda: reinicia el formulario y los resultados.
+  // Cambia con cada busqueda: reinicia los resultados (no los filtros, para no perder el foco).
   const searchKey = filtersToParams(filters).toString()
-  const hasFilters = searchKey !== ''
 
-  const apply = useCallback((next: Filters) => setSearchParams(filtersToParams(next)), [setSearchParams])
+  const apply = useCallback(
+    (next: Filters, options?: ApplyOptions) => setSearchParams(filtersToParams(next), { replace: options?.replace }),
+    [setSearchParams],
+  )
   const clear = useCallback(() => setSearchParams(new URLSearchParams()), [setSearchParams])
 
   return (
-    <Stack component="section" aria-labelledby="talentos-titulo" spacing={2.5}>
+    <Stack spacing={{ xs: 2, sm: 2.5 }}>
       <div>
-        <Typography id="talentos-titulo" variant="h2">Talentos</Typography>
-        <Typography color="text.secondary">
-          Personas que publicaron su perfil. Filtrá por área, ciudad, experiencia y más.
-        </Typography>
+        <Typography variant="h1" sx={{ mb: 0.5 }}>Talentos</Typography>
+        <Typography color="text.secondary">Personas que publicaron su perfil y su CV.</Typography>
       </div>
-      <DirectoryFilters key={searchKey} filters={filters} onApply={apply} />
-      <TalentResults key={`r-${searchKey}`} filters={filters} hasFilters={hasFilters} onClear={clear} />
+      <DirectoryFilters filters={filters} onApply={apply} />
+      <TalentResults key={searchKey} filters={filters} hasFilters={searchKey !== ''} onClear={clear} />
     </Stack>
   )
 }
