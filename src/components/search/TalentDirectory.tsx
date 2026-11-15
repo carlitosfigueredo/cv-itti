@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useCallback, useMemo } from 'react'
@@ -22,10 +23,15 @@ export function TalentDirectory() {
   const clear = useCallback(() => setSearchParams(new URLSearchParams()), [setSearchParams])
 
   return (
-    <Stack spacing={{ xs: 2, sm: 2.5 }}>
+    <Stack spacing={{ xs: 2.5, sm: 3 }}>
       <div>
-        <Typography variant="h1" sx={{ mb: 0.5 }}>Talentos</Typography>
-        <Typography color="text.secondary">Personas que publicaron su perfil y su CV.</Typography>
+        <Typography variant="h1" sx={{ mb: 1, maxWidth: 820 }}>
+          Encontrá el mejor talento de{' '}
+          <Box component="span" sx={{ color: 'primary.main' }}>ITTI y Grupo Vázquez</Box>
+        </Typography>
+        <Typography color="text.secondary" sx={{ maxWidth: 720, fontSize: { sm: '1.05rem' } }}>
+          Buscá por puesto o habilidad, filtrá por área y experiencia, y descargá el CV de cada profesional.
+        </Typography>
       </div>
       <DirectoryFilters filters={filters} onApply={apply} />
       <TalentResults key={searchKey} filters={filters} hasFilters={searchKey !== ''} onClear={clear} />

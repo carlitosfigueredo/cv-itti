@@ -43,9 +43,8 @@ beforeEach(() => {
 describe('HomePage', () => {
   it('muestra directamente el directorio; el header invita a cargar el CV', async () => {
     setup()
-    expect(screen.getByRole('heading', { level: 1, name: 'Talentos' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Encontrá el mejor talento de ITTI y Grupo Vázquez' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Cargar mi CV' })).toHaveAttribute('href', '/login')
-    expect(screen.queryByText(/comunidad itti y grupo vázquez/i)).not.toBeInTheDocument()
     await waitFor(() => expect(service.searchProfiles).toHaveBeenCalledWith({}))
   })
 
