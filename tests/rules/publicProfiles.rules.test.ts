@@ -219,6 +219,35 @@ describe('publicProfiles: metadatos del CV', () => {
   })
 })
 
+describe('publicProfiles: ciclo de publicacion', () => {
+  beforeEach(async () => {
+    await seedUser(env, 'u1', { affectedGrupoVazquez: true })
+    await seedProfile(env, 'u1')
+  })
+
+  it('privado -> publicado -> despublicado: la lectura publica sigue el estado', async () => {
+    const owner = as('u1')
+    await assertFails(getDoc(doc(anon(), 'publicProfiles', 'u1')))
+    await assertSucceeds(updateDoc(doc(owner, 'publicProfiles', 'u1'), { isPublic: true, updatedAt: serverTimestamp() }))
+    await assertSucceeds(getDoc(doc(anon(), 'publicProfiles', 'u1')))
+    await assertSucceeds(updateDoc(doc(owner, 'publicProfiles', 'u1'), { isPublic: false, updatedAt: serverTimestamp() }))
+    await assertFails(getDoc(doc(anon(), 'publicProfiles', 'u1')))
+    await assertSucceeds(getDoc(doc(owner, 'publicProfiles', 'u1')))
+  })
+
+  it('suspendido: el perfil que la funcion dejo privado no es legible y no se puede republicar', async () => {
+    // La suspension la aplica codigo de confianza: cuenta suspendida + perfil privado.
+    await seedUser(env, 'u1', { affectedGrupoVazquez: true, accountStatus: 'suspended' })
+    await seedProfile(env, 'u1', { isPublic: false })
+    await assertFails(getDoc(doc(anon(), 'publicProfiles', 'u1')))
+    await assertFails(updateDoc(doc(as('u1'), 'publicProfiles', 'u1'), { isPublic: true, updatedAt: serverTimestamp() }))
+  })
+
+  it('el consentimiento de contacto no se puede saltar al publicar', async () => {
+    await assertFails(updateDoc(doc(as('u1'), 'publicProfiles', 'u1'), { isPublic: true, publicEmail: 'a@b.com', updatedAt: serverTimestamp() }))
+  })
+})
+
 describe('deny por defecto', () => {
   it('colecciones no declaradas estan cerradas', async () => {
     await assertFails(setDoc(doc(as('u1'), 'cualquiera', 'x'), { a: 1 }))
