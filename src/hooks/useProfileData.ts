@@ -38,6 +38,12 @@ export function useProfileData(user: AuthUser) {
     setState(await load(user))
   }, [user])
 
+  // Vuelve a leer el perfil sin mostrar el estado de carga (por ejemplo tras subir un CV).
+  const refreshProfile = useCallback(async () => {
+    const profile = await getOwnProfile(user.uid)
+    setState((current) => (current.status === 'ready' ? { ...current, profile } : current))
+  }, [user.uid])
+
   const save = useCallback(
     async (content: ProfileContent, affected: boolean) => {
       if (state.status !== 'ready') throw new Error('Los datos todavia no estan cargados')
@@ -46,5 +52,5 @@ export function useProfileData(user: AuthUser) {
     [state, user.uid],
   )
 
-  return { state, reload, save }
+  return { state, reload, save, refreshProfile }
 }

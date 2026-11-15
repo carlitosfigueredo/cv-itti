@@ -73,7 +73,7 @@ export function ProfileForm({ defaultValues, onSubmit, submitError }: ProfileFor
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} aria-label="Formulario de perfil">
       <Stack spacing={3}>
-        <Alert severity="info">
+        <Alert severity="info" role="note">
           Tu perfil se guarda como privado. Nadie lo ve hasta que decidas publicarlo. Al publicarlo, tu CV también será público.
         </Alert>
 

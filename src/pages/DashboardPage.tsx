@@ -9,13 +9,14 @@ import { Link as RouterLink } from 'react-router-dom'
 import { ErrorState } from '@/components/common/ErrorState'
 import { LoadingState } from '@/components/common/LoadingState'
 import { PageContainer } from '@/components/common/PageContainer'
+import { CvManager } from '@/components/cv/CvManager'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfileData } from '@/hooks/useProfileData'
 import type { AuthUser } from '@/types/auth'
 import { AREA_LABELS } from '@/utils/catalogs'
 
 function DashboardContent({ user }: { user: AuthUser }) {
-  const { state, reload } = useProfileData(user)
+  const { state, reload, refreshProfile } = useProfileData(user)
 
   if (state.status === 'loading') return <LoadingState label="Cargando tu panel" />
   if (state.status === 'error') return <ErrorState message="No se pudo cargar tu panel." onRetry={reload} />
@@ -24,19 +25,22 @@ function DashboardContent({ user }: { user: AuthUser }) {
 
   if (!profile) {
     return (
-      <Card>
-        <CardContent>
-          <Stack spacing={2} sx={{ p: 1 }}>
-            <Typography variant="h3" component="h2">Todavía no creaste tu perfil</Typography>
-            <Typography color="text.secondary">
-              Completá tus datos profesionales. Tu perfil será privado hasta que decidas publicarlo.
-            </Typography>
-            <div>
-              <Button component={RouterLink} to="/perfil/editar" variant="contained">Crear mi perfil</Button>
-            </div>
-          </Stack>
-        </CardContent>
-      </Card>
+      <Stack spacing={3}>
+        <Card>
+          <CardContent>
+            <Stack spacing={2} sx={{ p: 1 }}>
+              <Typography variant="h3" component="h2">Todavía no creaste tu perfil</Typography>
+              <Typography color="text.secondary">
+                Completá tus datos profesionales. Tu perfil será privado hasta que decidas publicarlo.
+              </Typography>
+              <div>
+                <Button component={RouterLink} to="/perfil/editar" variant="contained">Crear mi perfil</Button>
+              </div>
+            </Stack>
+          </CardContent>
+        </Card>
+        <CvManager profile={null} onChanged={refreshProfile} />
+      </Stack>
     )
   }
 
@@ -56,7 +60,7 @@ function DashboardContent({ user }: { user: AuthUser }) {
               {profile.headline} - {AREA_LABELS[profile.area]} - {profile.city}
             </Typography>
             {!profile.isPublic && (
-              <Alert severity="info">
+              <Alert severity="info" role="note">
                 Nadie puede ver tu perfil todavía. La opción para publicarlo estará disponible pronto.
               </Alert>
             )}
@@ -66,12 +70,7 @@ function DashboardContent({ user }: { user: AuthUser }) {
           </Stack>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent>
-          <Typography variant="h3" component="h2" gutterBottom>Mi CV</Typography>
-          <Typography color="text.secondary">La carga de CV estará disponible pronto.</Typography>
-        </CardContent>
-      </Card>
+      <CvManager profile={profile} onChanged={refreshProfile} />
     </Stack>
   )
 }
