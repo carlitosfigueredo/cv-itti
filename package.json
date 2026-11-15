@@ -17,11 +17,13 @@
     "dev:emu": "vite --mode emulators",
     "emulators": "firebase emulators:start --project demo-cv-itti",
     "test:rules": "firebase emulators:exec --only firestore,storage --project demo-cv-itti \"vitest --run --config vitest.rules.config.ts\"",
-    "test:functions": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"vitest --run --config vitest.functions.config.ts\""
+    "test:functions": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"vitest --run --config vitest.functions.config.ts\"",
+    "test:e2e": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"node e2e/seed.mjs && playwright test\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@fontsource/poppins": "^5.3.0",
     "@hookform/resolvers": "^7.0.6",
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
@@ -36,6 +38,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@firebase/rules-unit-testing": "^6.0.0",
+    "@playwright/test": "^1.65.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.10",
