@@ -38,6 +38,10 @@ service cloud.firestore {
       return isStr(v, 12, 200) && v.matches('^https://[^\\s]+$');
     }
 
+    function profilePath(uid) {
+      return /databases/$(database)/documents/publicProfiles/$(uid);
+    }
+
     // ---------------------------------------------------------------- users
     function validUserCreate(d) {
       return d.keys().hasOnly(['uid', 'email', 'displayName', 'affectedGrupoVazquez', 'accountStatus', 'createdAt', 'updatedAt'])
@@ -142,6 +146,31 @@ service cloud.firestore {
         && validProfile(uid, request.resource.data)
         && request.resource.data.createdAt == resource.data.createdAt;
       allow delete: if false;
+    }
+
+    // -------------------------------------------------------------- reports
+    // Reportar exige sesion (reduce el spam) y se permite un reporte por usuario y
+    // perfil: el id del documento es {perfil}_{reportante} y no se puede modificar.
+    // Solo el admin lee los reportes. Su resolucion la hace codigo de confianza.
+    function validReportCreate(d, reportId) {
+      return d.keys().hasOnly(['profileUid', 'reason', 'comment', 'reporterUid', 'status', 'createdAt'])
+        && d.keys().hasAll(['profileUid', 'reason', 'reporterUid', 'status', 'createdAt'])
+        && isStr(d.profileUid, 1, 128)
+        && d.profileUid != request.auth.uid
+        && reportId == d.profileUid + '_' + request.auth.uid
+        && d.reason in ['inappropriate', 'false_information', 'spam', 'other']
+        && (!('comment' in d) || isStr(d.comment, 1, 500))
+        && d.reporterUid == request.auth.uid
+        && d.status == 'open'
+        && d.createdAt == request.time
+        && exists(profilePath(d.profileUid))
+        && get(profilePath(d.profileUid)).data.isPublic == true;
+    }
+
+    match /reports/{reportId} {
+      allow create: if signedIn() && validReportCreate(request.resource.data, reportId);
+      allow get, list: if isAdmin();
+      allow update, delete: if false;
     }
   }
 }
