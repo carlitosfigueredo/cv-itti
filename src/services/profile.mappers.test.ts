@@ -58,6 +58,11 @@ describe('formToProfileContent', () => {
     expect(c.affectedGrupoVazquez).toBe(true)
   })
 
+  it('genera palabras clave de busqueda a partir del perfil', () => {
+    const c = build({ ...base, area: 'otro', areaOther: 'Seguros' })
+    expect(c.searchTokens).toEqual(expect.arrayContaining(['contadora', 'conta', 'seguros', 'asuncion', 'excel', 'ana']))
+  })
+
   it('guarda el area propia solo cuando el area es otro', () => {
     expect(build({ ...base, area: 'otro', areaOther: ' Seguros ' }).areaOther).toBe('Seguros')
   })

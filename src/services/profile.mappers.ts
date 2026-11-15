@@ -1,7 +1,9 @@
 import type { Timestamp } from 'firebase/firestore'
 import type { ProfileFormInput, ProfileFormOutput } from '@/schemas/profile'
 import type { ProfileContent, PublicProfile } from '@/types/profile'
+import { AREA_LABELS } from '@/utils/catalogs'
 import { collapseSpaces, experienceBandFor, normalizeText } from '@/utils/normalize'
+import { buildSearchTokens } from '@/utils/searchTokens'
 
 function dedupeSkills(skills: string[]): { skills: string[]; skillsNormalized: string[] } {
   const seen = new Set<string>()
@@ -44,6 +46,13 @@ export function formToProfileContent(v: ProfileFormOutput): ProfileContent {
     affectedGrupoVazquezPublic: v.affectedGrupoVazquezPublic,
   }
   if (v.area === 'otro') content.areaOther = collapseSpaces(v.areaOther)
+  content.searchTokens = buildSearchTokens({
+    displayName: content.displayName,
+    headline: content.headline,
+    areaLabel: content.areaOther ?? AREA_LABELS[v.area],
+    city,
+    skills,
+  })
   if (v.summary) content.summary = v.summary
   if (v.linkedin) content.linkedin = v.linkedin
   if (v.github) content.github = v.github

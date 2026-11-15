@@ -58,6 +58,8 @@ export interface ProfileContent {
   experienceBand: ExperienceBand
   skills: string[]
   skillsNormalized: string[]
+  /** Palabras clave y sus comienzos para la caja de busqueda (ver utils/searchTokens.ts). */
+  searchTokens?: string[]
   workMode: WorkMode
   availability: Availability
   linkedin?: string
