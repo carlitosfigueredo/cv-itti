@@ -1,4 +1,3 @@
-import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -10,6 +9,7 @@ import { ErrorState } from '@/components/common/ErrorState'
 import { LoadingState } from '@/components/common/LoadingState'
 import { PageContainer } from '@/components/common/PageContainer'
 import { CvManager } from '@/components/cv/CvManager'
+import { PublicationCard } from '@/components/profile/PublicationCard'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfileData } from '@/hooks/useProfileData'
 import type { AuthUser } from '@/types/auth'
@@ -59,17 +59,13 @@ function DashboardContent({ user }: { user: AuthUser }) {
             <Typography color="text.secondary">
               {profile.headline} - {AREA_LABELS[profile.area]} - {profile.city}
             </Typography>
-            {!profile.isPublic && (
-              <Alert severity="info" role="note">
-                Nadie puede ver tu perfil todavía. La opción para publicarlo estará disponible pronto.
-              </Alert>
-            )}
             <div>
               <Button component={RouterLink} to="/perfil/editar" variant="outlined">Editar perfil</Button>
             </div>
           </Stack>
         </CardContent>
       </Card>
+      <PublicationCard profile={profile} onChanged={refreshProfile} />
       <CvManager profile={profile} onChanged={refreshProfile} />
     </Stack>
   )
