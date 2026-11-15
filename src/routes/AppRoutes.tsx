@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { LoadingState } from '@/components/common/LoadingState'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { RequireAdmin } from './RequireAdmin'
+import { RequireAuth } from './RequireAuth'
 
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
@@ -12,7 +14,7 @@ const PublicProfilePage = lazy(() => import('@/pages/PublicProfilePage'))
 const AdminPage = lazy(() => import('@/pages/AdminPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
-// Las guardas de autenticacion y admin se agregan en la Fase 3.
+// Las guardas son una mejora de UX; la seguridad real vive en reglas y Cloud Functions.
 export function AppRoutes() {
   return (
     <Suspense fallback={<LoadingState />}>
@@ -22,9 +24,13 @@ export function AppRoutes() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/talentos" element={<TalentSearchPage />} />
           <Route path="/talentos/:uid" element={<PublicProfilePage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/perfil/editar" element={<EditProfilePage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/perfil/editar" element={<EditProfilePage />} />
+          </Route>
+          <Route element={<RequireAdmin />}>
+            <Route path="/admin" element={<AdminPage />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
