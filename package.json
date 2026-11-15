@@ -13,7 +13,9 @@
     "preview": "vite preview --mode prod",
     "lint": "eslint .",
     "typecheck": "tsc -b --pretty",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "dev:emu": "vite --mode emulators",
+    "emulators": "firebase emulators:start --project demo-cv-itti"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
