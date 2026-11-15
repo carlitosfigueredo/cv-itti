@@ -1,3 +1,5 @@
+import PublicIcon from '@mui/icons-material/Public'
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -7,9 +9,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Stack from '@mui/material/Stack'
-import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
@@ -45,7 +45,7 @@ export function PublicationCard({ profile, onChanged }: PublicationCardProps) {
   }
 
   function handleToggle() {
-    // Publicar pide confirmacion informada; despublicar es inmediato.
+    // Publicar pide confirmacion informada; dejar de publicar es inmediato.
     if (profile.isPublic) void apply(false)
     else setConfirmOpen(true)
   }
@@ -54,27 +54,41 @@ export function PublicationCard({ profile, onChanged }: PublicationCardProps) {
     <Card component="section" aria-labelledby="publicacion-titulo">
       <CardContent>
         <Stack spacing={2} sx={{ p: 1 }}>
-          <Typography id="publicacion-titulo" variant="h3" component="h2">Visibilidad</Typography>
-          <FormControlLabel
-            control={<Switch
-                checked={profile.isPublic}
-                onChange={handleToggle}
-                disabled={busy}
-                slotProps={{ input: { role: 'switch' } }}
-              />}
-            label={profile.isPublic ? 'Mi perfil está publicado' : 'Mi perfil es privado'}
-          />
+          <Typography id="publicacion-titulo" variant="h3" component="h2">Publicación de tu perfil</Typography>
+
+          {profile.isPublic ? (
+            <Alert severity="success" icon={<PublicIcon />} role="status">
+              <strong>Tu perfil está publicado.</strong> Cualquier persona puede encontrarlo en el directorio, verlo y
+              descargar tu CV.
+            </Alert>
+          ) : (
+            <Alert severity="info" icon={<VisibilityOffOutlinedIcon />} role="status">
+              <strong>Tu perfil es privado.</strong> Solo vos lo ves. No aparece en el directorio y tu CV no se puede
+              descargar.
+            </Alert>
+          )}
+
           <Typography variant="body2" color="text.secondary">
             {profile.isPublic
-              ? 'Cualquier persona puede encontrar tu perfil y descargar tu CV. Si lo despublicás, dejará de estar disponible en la plataforma de inmediato, pero no podemos recuperar copias ya descargadas.'
-              : 'Nadie puede ver tu perfil ni tu CV hasta que lo publiques.'}
+              ? 'Si dejás de publicarlo, dejará de estar disponible en la plataforma de inmediato. No podemos recuperar copias de tu CV que ya se hayan descargado.'
+              : 'Cuando estés listo, publicalo para que empresas y reclutadores te encuentren. Antes vas a ver qué datos se muestran.'}
           </Typography>
+
           {error && <Alert severity="error">{error}</Alert>}
-          <div>
-            <Button component={RouterLink} to={`/talentos/${profile.uid}`} variant="outlined">
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+            {profile.isPublic ? (
+              <Button variant="outlined" color="inherit" onClick={handleToggle} disabled={busy}>
+                Dejar de publicar
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={handleToggle} disabled={busy}>
+                Publicar mi perfil
+              </Button>
+            )}
+            <Button component={RouterLink} to={`/talentos/${profile.uid}`} variant="text">
               {profile.isPublic ? 'Ver mi perfil público' : 'Ver vista previa'}
             </Button>
-          </div>
+          </Stack>
         </Stack>
       </CardContent>
 
