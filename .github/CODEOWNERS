@@ -1,0 +1,9 @@
+# Responsables del codigo: toda revision de un pull request requiere su aprobacion.
+# https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+*                     @carlitosfigueredo
+
+# Zonas sensibles de seguridad (se listan aparte para que sea explicito).
+/firestore.rules      @carlitosfigueredo
+/storage.rules        @carlitosfigueredo
+/functions/           @carlitosfigueredo
+/.github/             @carlitosfigueredo
