@@ -7,7 +7,7 @@ Especificacion en `.kiro/specs/talent-platform/` (requirements, design, tasks). 
 ## Requisitos
 
 - Node >= 22.12 (probado con la LTS 26). Con nvm: `nvm install --lts`.
-- Firebase CLI: `npm i -g firebase-tools`.
+- Firebase CLI: viene como dependencia de desarrollo (`npx firebase ...`).
 
 ## Ambientes
 
@@ -34,3 +34,8 @@ Los archivos `.env.*.local` no se commitean. Usar `.env.example` como plantilla 
 ## Estado
 
 Fases 0 a 7 completas (base, Firebase, login, perfil, CV, publicación y directorio). Siguiente: Fase 8 (administración y moderación). Ver `.kiro/specs/talent-platform/tasks.md`, `docs/search.md` y `docs/change-tracker.md`.
+
+## Contribuir
+
+Ver [CONTRIBUTING.md](CONTRIBUTING.md). Para reportar vulnerabilidades, [SECURITY.md](SECURITY.md).
+
