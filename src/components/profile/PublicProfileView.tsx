@@ -15,11 +15,10 @@ import Typography from '@mui/material/Typography'
 import type { ReactNode } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import type { PublicProfile } from '@/types/profile'
+import { WorkInfoChips } from './WorkInfoChips'
 import {
   AREA_LABELS,
-  AVAILABILITY_LABELS,
   COUNTRY_LABELS,
-  WORK_MODE_LABELS,
 } from '@/utils/catalogs'
 import { initialsOf } from '@/utils/normalize'
 
@@ -82,12 +81,7 @@ export function PublicProfileView({ profile, preview, onDownloadCv, downloadingC
               <Chip label={area} />
               <Chip label={`${profile.city}, ${COUNTRY_LABELS[profile.country]}`} variant="outlined" />
               <Chip label={`${profile.experienceYears} ${profile.experienceYears === 1 ? 'año' : 'años'} de experiencia`} variant="outlined" />
-              <Chip label={WORK_MODE_LABELS[profile.workMode]} variant="outlined" />
-              <Chip
-                label={AVAILABILITY_LABELS[profile.availability]}
-                color={profile.availability === 'available' ? 'success' : 'default'}
-                variant="outlined"
-              />
+              <WorkInfoChips availability={profile.availability} workMode={profile.workMode} />
               {showAffected && <Chip label="Afectado por Grupo Vázquez" color="secondary" />}
             </Stack>
 
