@@ -38,7 +38,7 @@ Los emuladores no exigen índices: el primer uso real contra Firebase puede fall
 firebase deploy --only firestore:indexes --project dev
 ```
 
-Los índices tardan unos minutos en construirse. Si una combinación de filtros devuelve un error de índice, agregarlo a `firestore.indexes.json`.
+Los índices tardan unos minutos en construirse. Después, verificar con `npm run check:indexes -- cv-itti-dev`: ejecuta cada forma de consulta de la app (directorio y panel de administración) y falla si alguna necesita un índice. Si se agrega una consulta nueva, sumarla al script.
 
 ## Limitaciones de Firestore como buscador
 

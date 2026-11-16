@@ -18,7 +18,9 @@
     "emulators": "firebase emulators:start --project demo-cv-itti",
     "test:rules": "firebase emulators:exec --only firestore,storage --project demo-cv-itti \"vitest --run --config vitest.rules.config.ts\"",
     "test:functions": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"vitest --run --config vitest.functions.config.ts\"",
-    "test:e2e": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"node e2e/seed.mjs && playwright test\""
+    "test:e2e": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"node e2e/seed.mjs && playwright test\"",
+    "check:indexes": "node scripts/check-indexes.mjs",
+    "check:config": "node -e \"for (const f of ['firebase.json','firestore.indexes.json','storage.cors.dev.json','storage.cors.prod.json','.firebaserc']) { JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('ok', f) }\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
