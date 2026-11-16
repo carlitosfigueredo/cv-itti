@@ -27,6 +27,12 @@ describe('paginas legales', () => {
     expect(screen.getAllByText(/\[email de contacto a definir\]/).length).toBeGreaterThan(0)
   })
 
+  it('el descargo aclara que es una iniciativa independiente y no oficial', () => {
+    renderPage(<DisclaimerPage />)
+    expect(screen.getByRole('heading', { name: /iniciativa independiente y no oficial/i })).toBeInTheDocument()
+    expect(screen.getByText(/no es un sitio oficial/i)).toBeInTheDocument()
+  })
+
   it('la politica de privacidad informa donde se guardan los datos y la ley de referencia', () => {
     renderPage(<PrivacyPage />)
     expect(screen.getByText(/estados unidos \(región us-central1\)/i)).toBeInTheDocument()

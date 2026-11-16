@@ -2,6 +2,16 @@ import { ContactEmail, LegalPage, Owner, type LegalSection } from '@/components/
 
 const sections: LegalSection[] = [
   {
+    title: 'Iniciativa independiente y no oficial',
+    body: (
+      <p>
+        itti talentos es una iniciativa personal e independiente de <Owner />. <strong>No es un sitio oficial</strong> de
+        ITTI ni de Grupo Vázquez, y no está afiliada, patrocinada ni respaldada por esas organizaciones ni por ninguna
+        empresa vinculada a ellas.
+      </p>
+    ),
+  },
+  {
     title: 'No somos una agencia de empleo',
     body: (
       <p>
@@ -43,9 +53,9 @@ const sections: LegalSection[] = [
     title: 'Mención de ITTI y Grupo Vázquez',
     body: (
       <p>
-        Los nombres ITTI y Grupo Vázquez se usan para identificar a la comunidad de profesionales a la que está dirigida la
-        plataforma. Su mención no implica que esas organizaciones respalden, verifiquen o se hagan responsables de los
-        perfiles publicados.
+        Los nombres ITTI y Grupo Vázquez se usan solo para identificar a la comunidad de profesionales a la que está
+        dirigida la plataforma. Su mención no implica relación, respaldo ni responsabilidad de esas organizaciones sobre la
+        plataforma o los perfiles publicados.
       </p>
     ),
   },

@@ -5,8 +5,8 @@ const sections: LegalSection[] = [
     title: 'Responsable',
     body: (
       <p>
-        El responsable del tratamiento de los datos es <Owner />. Para consultas o para ejercer tus derechos escribí a{' '}
-        <ContactEmail />.
+        El responsable del tratamiento de los datos es <Owner />, a título personal. ITTI y Grupo Vázquez no son
+        responsables ni tienen acceso a estos datos. Para consultas o para ejercer tus derechos escribí a <ContactEmail />.
       </p>
     ),
   },

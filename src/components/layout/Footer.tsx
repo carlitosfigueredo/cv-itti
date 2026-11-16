@@ -20,7 +20,7 @@ export function Footer() {
           <Box>
             <BrandLogo />
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Para la comunidad de ITTI y Grupo Vázquez.
+              Para la comunidad de ITTI y Grupo Vázquez. Iniciativa independiente, no oficial.
             </Typography>
           </Box>
           <Stack spacing={1} sx={{ alignItems: { xs: 'flex-start', sm: 'flex-end' } }}>

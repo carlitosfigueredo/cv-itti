@@ -10,7 +10,8 @@ const sections: LegalSection[] = [
         <p>
           itti talentos es un directorio en línea donde profesionales de la comunidad de ITTI y Grupo Vázquez pueden
           crear un perfil laboral y publicar su CV, y donde empresas y personas que reclutan pueden buscarlos y
-          contactarlos. La plataforma es administrada por <Owner />.
+          contactarlos. Es una iniciativa personal, independiente y no oficial administrada por <Owner />, sin relación
+          con ITTI ni con Grupo Vázquez.
         </p>
         <p>Al usar el sitio aceptás estos términos. Si no estás de acuerdo, no lo uses.</p>
       </>
