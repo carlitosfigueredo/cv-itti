@@ -34,12 +34,12 @@ export const WORK_MODE_LABELS: Record<WorkMode, string> = {
   remote: 'Remoto',
   hybrid: 'Híbrido',
   onsite: 'Presencial',
-  any: 'Cualquiera',
+  any: 'Cualquier modalidad',
 }
 
 export const AVAILABILITY_LABELS: Record<Availability, string> = {
-  available: 'Disponible',
-  not_available: 'No disponible',
+  available: 'Disponible ahora',
+  not_available: 'No disponible por ahora',
 }
 
 export const EXPERIENCE_BAND_LABELS: Record<ExperienceBand, string> = {

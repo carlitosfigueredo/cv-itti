@@ -106,6 +106,21 @@ test.describe('tema claro y oscuro', () => {
   })
 })
 
+test.describe('tarjeta de talento', () => {
+  test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'light' })
+
+  test('el boton "Ver perfil completo" y un click en la tarjeta abren el perfil', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('link', { name: 'Ver perfil completo de Lucía Duarte' }).click()
+    await expect(page).toHaveURL(/\/talentos\/lucia$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Lucía Duarte' })).toBeVisible()
+    await page.goBack()
+    // Click en una zona de la tarjeta que no es el boton (cerca del titular).
+    await page.locator('.MuiCard-root', { hasText: 'Jorge Ortiz' }).click({ position: { x: 40, y: 40 } })
+    await expect(page).toHaveURL(/\/talentos\/jorge$/)
+  })
+})
+
 test.describe('buscador', () => {
   test.use({ viewport: { width: 1280, height: 800 }, colorScheme: 'light' })
 
@@ -132,6 +147,11 @@ test.describe('buscador', () => {
     await expect(page.getByRole('link', { name: /carlos giménez/i })).toBeVisible()
     await expect(page.getByRole('link', { name: /diego ramírez/i })).toBeVisible()
     await expect(page.getByRole('link', { name: /jorge ortiz/i })).toBeHidden()
+    // Etiquetas explicitas de disponibilidad y modalidad
+    const diego = page.locator('.MuiCard-root', { hasText: 'Diego Ramírez' })
+    await expect(diego.getByText('Disponible ahora')).toBeVisible()
+    await expect(diego.getByText('Cualquier modalidad')).toBeVisible()
+    await expect(diego.getByText('Ver perfil completo')).toBeVisible()
     await page.screenshot({ path: 'e2e/.screenshots/buscador-escritorio-1280.png', fullPage: true })
   })
 })
