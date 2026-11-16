@@ -9,6 +9,7 @@ import { ErrorState } from '@/components/common/ErrorState'
 import { LoadingState } from '@/components/common/LoadingState'
 import { PageContainer } from '@/components/common/PageContainer'
 import { CvManager } from '@/components/cv/CvManager'
+import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard'
 import { PublicationCard } from '@/components/profile/PublicationCard'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfileData } from '@/hooks/useProfileData'
@@ -40,6 +41,7 @@ function DashboardContent({ user }: { user: AuthUser }) {
           </CardContent>
         </Card>
         <CvManager profile={null} onChanged={refreshProfile} />
+        <DeleteAccountCard />
       </Stack>
     )
   }
@@ -67,6 +69,7 @@ function DashboardContent({ user }: { user: AuthUser }) {
       </Card>
       <PublicationCard profile={profile} onChanged={refreshProfile} />
       <CvManager profile={profile} onChanged={refreshProfile} />
+      <DeleteAccountCard />
     </Stack>
   )
 }
