@@ -1,0 +1,48 @@
+rules_version = '2';
+
+// Reglas de Storage (Fase 5). Todo lo no declarado queda denegado.
+// El CV vive en cvs/{uid}/cv.pdf y es legible por el publico solo mientras el
+// perfil del dueno este publicado (publicProfiles/{uid}.isPublic == true).
+// Las reglas consultan Firestore: el agente de servicio de Storage necesita el rol
+// "Firebase Rules Firestore Service Agent". La CLI lo ofrece al desplegar por primera vez.
+// El contenido binario real del PDF lo valida la Cloud Function validateCvUpload.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.get('admin', false) == true;
+    }
+
+    function isActiveUser(uid) {
+      return firestore.exists(/databases/(default)/documents/users/$(uid))
+        && firestore.get(/databases/(default)/documents/users/$(uid)).data.accountStatus == 'active';
+    }
+
+    function profileIsPublic(uid) {
+      return firestore.exists(/databases/(default)/documents/publicProfiles/$(uid))
+        && firestore.get(/databases/(default)/documents/publicProfiles/$(uid)).data.isPublic == true;
+    }
+
+    match /cvs/{uid}/cv.pdf {
+      allow read: if isOwner(uid) || isAdmin() || profileIsPublic(uid);
+
+      // Maximo 5 MB, solo PDF, solo el dueno y solo si la cuenta esta activa.
+      allow create, update: if isOwner(uid)
+        && isActiveUser(uid)
+        && request.resource.size > 0
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType == 'application/pdf';
+
+      // El dueno borra su CV. El admin puede retirar contenido inapropiado.
+      allow delete: if isOwner(uid) || isAdmin();
+    }
+  }
+}

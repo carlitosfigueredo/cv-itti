@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://cv-itti.web.app", "https://cv-itti.firebaseapp.com"\],
+    "method": ["GET", "HEAD"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "cv-itti-dev",
+    "dev": "cv-itti-dev",
+    "prod": "cv-itti"
+  }
+}
