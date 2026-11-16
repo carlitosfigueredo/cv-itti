@@ -1,0 +1,62 @@
+name: Deploy
+
+# develop -> cv-itti-dev (QA)      https://cv-itti-dev.web.app
+# main    -> cv-itti (produccion)  https://cv-itti.web.app  (requiere aprobacion en el entorno "prod")
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # para obtener credenciales de Google sin llaves (Workload Identity Federation)
+
+# Un despliegue por rama a la vez; no se cancela uno en curso.
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  hosting:
+    name: Hosting (${{ github.ref_name == 'main' && 'prod' || 'dev' }})
+    if: github.ref_name == 'develop' || github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+      url: https://${{ vars.FIREBASE_PROJECT_ID }}.web.app
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+      - run: npm ci
+      # El build revisa tambien los tipos de functions/ (tsc -b).
+      - run: npm ci --prefix functions
+      - run: npm test
+      - name: Build
+        run: npm run ${{ github.ref_name == 'main' && 'build' || 'build:dev' }}
+        env:
+          # Configuracion publica de la web app (no son secretos). Vite toma las VITE_* del entorno.
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+          VITE_LEGAL_OWNER: ${{ vars.VITE_LEGAL_OWNER }}
+          VITE_LEGAL_CONTACT_EMAIL: ${{ vars.VITE_LEGAL_CONTACT_EMAIL }}
+          VITE_APPCHECK_SITE_KEY: ${{ vars.VITE_APPCHECK_SITE_KEY }}
+
+      - name: Credenciales de Google (sin llaves)
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SA }}
+
+      - name: Desplegar en Firebase Hosting
+        run: npx firebase deploy --only hosting --project "${{ vars.FIREBASE_PROJECT_ID }}" --non-interactive

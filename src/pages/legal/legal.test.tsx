@@ -4,6 +4,23 @@ import DisclaimerPage from './DisclaimerPage'
 import PrivacyPage from './PrivacyPage'
 import TermsPage from './TermsPage'
 
+// Los datos del responsable vienen de variables de entorno: se fijan aca para que el
+// resultado no dependa de donde se ejecuten las pruebas.
+const legal = vi.hoisted(() => ({ owner: null as string | null, contactEmail: null as string | null }))
+vi.mock('@/config/legal', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/config/legal')>()
+  return {
+    ...original,
+    legalConfig: { ...original.legalConfig, get owner() { return legal.owner }, get contactEmail() { return legal.contactEmail } },
+    get legalComplete() { return Boolean(legal.owner && legal.contactEmail) },
+  }
+})
+
+beforeEach(() => {
+  legal.owner = null
+  legal.contactEmail = null
+})
+
 const renderPage = (ui: React.ReactElement) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
 describe('paginas legales', () => {
@@ -25,6 +42,15 @@ describe('paginas legales', () => {
     renderPage(<PrivacyPage />)
     expect(screen.getByText(/borrador: falta completar/i)).toBeInTheDocument()
     expect(screen.getAllByText(/\[email de contacto a definir\]/).length).toBeGreaterThan(0)
+  })
+
+  it('con responsable y email configurados no muestra el aviso de borrador', () => {
+    legal.owner = 'Persona Responsable'
+    legal.contactEmail = 'contacto@example.com'
+    renderPage(<PrivacyPage />)
+    expect(screen.queryByText(/borrador: falta completar/i)).not.toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: 'contacto@example.com' })[0]).toHaveAttribute('href', 'mailto:contacto@example.com')
+    expect(screen.getAllByText(/persona responsable/i).length).toBeGreaterThan(0)
   })
 
   it('el descargo aclara que es una iniciativa independiente y no oficial', () => {

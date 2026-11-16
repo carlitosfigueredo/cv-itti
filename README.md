@@ -194,6 +194,7 @@ Todas son públicas en el navegador (las variables `VITE_*` se incluyen en el bu
 | `VITE_USE_EMULATORS` | No | `true` para conectar a los emuladores locales. |
 | `VITE_LEGAL_OWNER` | Para publicar | Nombre del responsable que figura en los textos legales. |
 | `VITE_LEGAL_CONTACT_EMAIL` | Para publicar | Email de contacto y para ejercer derechos sobre datos. Si falta, las páginas legales muestran un aviso de borrador. |
+| `VITE_APPCHECK_SITE_KEY` | Recomendada | Clave de sitio de reCAPTCHA Enterprise para App Check (pública). Si falta, App Check no se activa. |
 
 ## Scripts
 
@@ -210,6 +211,7 @@ Todas son públicas en el navegador (las variables `VITE_*` se incluyen en el bu
 | `npm test` | Pruebas unitarias y de componentes (Vitest). |
 | `npm run test:rules` | Pruebas de reglas de Firestore y Storage contra emuladores. |
 | `npm run test:functions` | Pruebas de las Cloud Functions contra emuladores. |
+| `npm run check:indexes -- <proyecto>` | Ejecuta cada consulta de la app contra Firestore real y avisa si falta un índice (los emuladores no lo detectan). |
 | `npm run test:e2e` | Pruebas de punta a punta y responsive con Playwright (la primera vez: `npx playwright install chromium`). |
 
 ## Pruebas
@@ -225,24 +227,21 @@ La CI (`.github/workflows/ci.yml`) corre lint, tipos, pruebas unitarias, build, 
 
 ## Despliegue
 
-Siempre con el proyecto explícito (`--project dev` o `--project prod`). Producción solo con aprobación.
+| Rama | Ambiente | URL pública |
+|------|----------|-------------|
+| `develop` | dev / QA (`cv-itti-dev`) | https://cv-itti-dev.web.app |
+| `main` | producción (`cv-itti`) | https://cv-itti.web.app (con aprobación) |
+
+El frontend se despliega solo al hacer push a esas ramas (GitHub Actions + Workload Identity Federation, sin llaves). Reglas, índices y Cloud Functions se despliegan a mano. Detalle en [docs/despliegue.md](docs/despliegue.md).
 
 ```bash
-# Reglas e índices (esperar a que los índices esten en READY antes de usar el directorio)
+# Backend en dev (esperar a que los indices esten en READY)
 npx firebase deploy --only firestore:rules,firestore:indexes,storage --project dev
-gcloud firestore indexes composite list --project=cv-itti-dev --format="value(state)"
-
-# Cloud Functions
 npx firebase deploy --only functions --project dev
 
 # CORS del bucket (necesario para descargar CV desde el navegador)
 gcloud storage buckets update gs://cv-itti-dev.firebasestorage.app --cors-file=storage.cors.dev.json
-
-# Hosting
-npm run build:dev && npx firebase deploy --only hosting --project dev
 ```
-
-Para producción: `npm run build`, `--project prod`, `storage.cors.prod.json` y completar las variables legales en `.env.prod.local`.
 
 ## Seguridad y privacidad
 
@@ -250,7 +249,9 @@ Para producción: `npm run build`, `--project prod`, `storage.cors.prod.json` y 
 - Perfiles y CV privados por defecto; publicación y datos de contacto con consentimiento explícito y separado.
 - Rol de administrador como *custom claim*, otorgado solo desde código de confianza. Acciones de moderación en Cloud Functions con verificación en el servidor y auditoría.
 - Validación de PDF en tres capas: navegador (tipo, tamaño y firma `%PDF-`), reglas de Storage (tipo y 5 MB) y la función `validateCvUpload` (contenido real).
+- App Check con reCAPTCHA Enterprise (hoy en modo monitoreo) y Content Security Policy estricta (sin `eval`).
 - Encabezados de seguridad en Hosting (HSTS, `X-Frame-Options`, `nosniff`, `Referrer-Policy`).
+- 0 vulnerabilidades conocidas en las dependencias que llegan al navegador. Detalle en [docs/seguridad.md](docs/seguridad.md).
 - Sin analítica ni cookies publicitarias. Los logs no registran datos personales.
 - Textos legales en `/legal/*`, tomando como referencia la Ley N.º 7593/2025 de Paraguay. **Borrador: requieren revisión legal.**
 
@@ -267,8 +268,8 @@ Reportar vulnerabilidades: [.github/SECURITY.md](.github/SECURITY.md).
 - La caja de búsqueda encuentra una palabra a la vez (Firestore no tiene búsqueda de texto completo). Si hace falta más, ver [docs/search.md](docs/search.md) (Algolia / Typesense).
 - Los perfiles guardados antes de la búsqueda por palabras clave no aparecen al buscar por texto hasta que su dueño los vuelve a guardar.
 - Al ser una SPA, los perfiles públicos no están optimizados para buscadores (SEO).
-- App Check y la *Content Security Policy* todavía no están configurados.
-- El archivo JavaScript más grande pesa ~640 kB (incluye el SDK de Firebase); pendiente de optimizar.
+- App Check está activo pero todavía no se exige (modo monitoreo). Ver [docs/seguridad.md](docs/seguridad.md#estado-modo-monitoreo-no-se-exige).
+- El archivo JavaScript principal pesa ~207 kB comprimido (incluye Firebase).
 
 ## Estado del proyecto
 
@@ -277,7 +278,7 @@ Reportar vulnerabilidades: [.github/SECURITY.md](.github/SECURITY.md).
 | 0–7: base, Firebase, login, perfil, CV, publicación, directorio | Completas |
 | Rediseño, buscador, textos legales, CI y protección de `main` | Completos |
 | 8: administración y moderación | Implementada; falta desplegar las Cloud Functions |
-| 9: seguridad y rendimiento (App Check, CSP, auditoría de dependencias) | Pendiente |
+| 9: seguridad y rendimiento (App Check, CSP, dependencias, bundle) | Completa; falta exigir App Check tras revisar métricas |
 | 10: publicación en producción | Pendiente |
 
 Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-platform/tasks.md) y cambios en [docs/change-tracker.md](docs/change-tracker.md).
@@ -289,6 +290,8 @@ Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-
 | [docs/firebase-setup.md](docs/firebase-setup.md) | Crear y conectar proyectos Firebase, emuladores, CORS. |
 | [docs/search.md](docs/search.md) | Búsqueda, filtros, índices y limitaciones. |
 | [docs/administracion.md](docs/administracion.md) | Rol de administrador, panel y moderación. |
+| [docs/despliegue.md](docs/despliegue.md) | Ramas, ambientes y despliegue continuo. |
+| [docs/seguridad.md](docs/seguridad.md) | Capas de seguridad, App Check, CSP y dependencias. |
 | [docs/change-tracker.md](docs/change-tracker.md) | Registro de cambios. |
 | [.kiro/specs/talent-platform/](.kiro/specs/talent-platform/) | Requisitos, diseño y plan de tareas. |
 
@@ -296,4 +299,4 @@ Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-
 
 Ver [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md). La rama `main` está protegida: los cambios entran por pull request con revisión del responsable del código y la CI en verde.
 
-Licencia: pendiente de definir.
+Licencia: [MIT](LICENSE). El código es abierto; los datos de los perfiles y los CV no forman parte del repositorio ni de la licencia.

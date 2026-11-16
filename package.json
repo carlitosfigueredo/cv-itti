@@ -18,7 +18,9 @@
     "emulators": "firebase emulators:start --project demo-cv-itti",
     "test:rules": "firebase emulators:exec --only firestore,storage --project demo-cv-itti \"vitest --run --config vitest.rules.config.ts\"",
     "test:functions": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"vitest --run --config vitest.functions.config.ts\"",
-    "test:e2e": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"node e2e/seed.mjs && playwright test\""
+    "test:e2e": "firebase emulators:exec --only auth,firestore,storage --project demo-cv-itti \"node e2e/seed.mjs && playwright test\"",
+    "check:indexes": "node scripts/check-indexes.mjs",
+    "check:config": "node -e \"for (const f of ['firebase.json','firestore.indexes.json','storage.cors.dev.json','storage.cors.prod.json','.firebaserc']) { JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('ok', f) }\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -49,12 +51,16 @@
     "eslint": "^10.15.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.8",
-    "firebase-tools": "^13.29.1",
+    "firebase-tools": "^15.36.0",
     "globals": "^17.14.0",
     "jsdom": "^31.0.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"
-  }
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.7"
+  },
+  "license": "MIT"
 }

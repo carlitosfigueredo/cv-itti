@@ -1,4 +1,4 @@
-import type { Timestamp } from 'firebase/firestore'
+import type { Timestamp } from 'firebase/firestore/lite'
 
 // Catalogos cerrados. Los codigos se guardan en Firestore; las etiquetas
 // para mostrar viven en utils/catalogs.ts.

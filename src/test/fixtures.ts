@@ -1,4 +1,4 @@
-import { Timestamp } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore/lite'
 import type { PublicProfile } from '@/types/profile'
 
 export function makeProfile(extra: Partial<PublicProfile> = {}): PublicProfile {

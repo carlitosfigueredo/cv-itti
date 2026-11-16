@@ -11,6 +11,7 @@ const envSchema = z.object({
   VITE_FIREBASE_MESSAGING_SENDER_ID: requiredString('VITE_FIREBASE_MESSAGING_SENDER_ID'),
   VITE_FIREBASE_APP_ID: requiredString('VITE_FIREBASE_APP_ID'),
   VITE_USE_EMULATORS: z.enum(['true', 'false']).optional(),
+  VITE_APPCHECK_SITE_KEY: z.string().trim().optional(),
 })
 
 export interface FirebaseEnv {
@@ -21,6 +22,8 @@ export interface FirebaseEnv {
   messagingSenderId: string
   appId: string
   useEmulators: boolean
+  /** Clave de sitio de reCAPTCHA Enterprise para App Check. null = App Check desactivado. */
+  appCheckSiteKey: string | null
 }
 
 export type FirebaseEnvResult =
@@ -45,6 +48,7 @@ export function readFirebaseEnv(raw: Record<string, unknown>): FirebaseEnvResult
       messagingSenderId: v.VITE_FIREBASE_MESSAGING_SENDER_ID,
       appId: v.VITE_FIREBASE_APP_ID,
       useEmulators: v.VITE_USE_EMULATORS === 'true',
+      appCheckSiteKey: v.VITE_APPCHECK_SITE_KEY ? v.VITE_APPCHECK_SITE_KEY : null,
     },
   }
 }

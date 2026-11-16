@@ -1,4 +1,4 @@
-import { deleteField, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { deleteField, doc, serverTimestamp, updateDoc } from 'firebase/firestore/lite'
 import { deleteObject, getBlob, ref, uploadBytesResumable } from 'firebase/storage'
 import { getFirebase } from '@/firebase/config'
 import { CV_CONTENT_TYPE } from '@/utils/cvFile'

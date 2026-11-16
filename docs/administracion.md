@@ -45,6 +45,10 @@ Todas pasan por Cloud Functions (`functions/src/index.ts`), piden un motivo que 
 | Resolver / descartar reporte | `resolveReportCall` | Cierra el reporte y registra quién lo hizo. |
 | Eliminar cuenta | `deleteAccount` | Borra CV, perfil, documento privado y usuario de Authentication. Es repetible si falla a mitad de camino. Exige un inicio de sesión de hace menos de 5 minutos. |
 
+## Índices
+
+Las listas del panel (reportes por estado, usuarios por filtros) necesitan índices compuestos definidos en `firestore.indexes.json`. Verificarlos con `npm run check:indexes -- <proyecto>`.
+
 ## Auditoría y retención
 
 - Colección `adminAudit`: la escriben solo las funciones y el script; las personas administradoras solo la leen.

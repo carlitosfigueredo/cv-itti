@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 # Minimo privilegio: el workflow solo lee el repositorio.
 permissions:
@@ -29,6 +29,7 @@ jobs:
             functions/package-lock.json
       - run: npm ci
       - run: npm ci --prefix functions
+      - run: npm run check:config
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test

@@ -1,7 +1,7 @@
 import {
   collection,
   doc,
-  getCountFromServer,
+  getCount,
   getDoc,
   getDocs,
   limit,
@@ -11,7 +11,7 @@ import {
   where,
   type QueryConstraint,
   type QueryDocumentSnapshot,
-} from 'firebase/firestore'
+} from 'firebase/firestore/lite'
 import { httpsCallable } from 'firebase/functions'
 import { getFirebase } from '@/firebase/config'
 import type { AdminStats, AdminUserRow, AuditRow, ModerateAction, ReportRow } from '@/types/admin'
@@ -19,7 +19,7 @@ import type { PublicProfile } from '@/types/profile'
 
 export const ADMIN_PAGE_SIZE = 25
 
-const count = async (...args: Parameters<typeof query>) => (await getCountFromServer(query(...args))).data().count
+const count = async (...args: Parameters<typeof query>) => (await getCount(query(...args))).data().count
 
 // Estadisticas con consultas de agregacion: cada conteo se cobra como lecturas
 // por cada 1000 documentos contados, no por documento leido.

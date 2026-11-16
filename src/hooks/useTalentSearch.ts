@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { searchProfiles } from '@/services/search.service'
 import type { PublicProfile } from '@/types/profile'
 import type { DirectoryFilters } from '@/types/search'
-import type { QueryDocumentSnapshot } from 'firebase/firestore'
+import type { QueryDocumentSnapshot } from 'firebase/firestore/lite'
 
 type State =
   | { status: 'loading' }

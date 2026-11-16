@@ -16,6 +16,15 @@ describe('readFirebaseEnv', () => {
     if (result.ok) expect(result.env.useEmulators).toBe(false)
   })
 
+  it('App Check queda desactivado sin clave y activo con clave', () => {
+    const without = readFirebaseEnv(valid)
+    expect(without.ok && without.env.appCheckSiteKey).toBeNull()
+    const blank = readFirebaseEnv({ ...valid, VITE_APPCHECK_SITE_KEY: '  ' })
+    expect(blank.ok && blank.env.appCheckSiteKey).toBeNull()
+    const withKey = readFirebaseEnv({ ...valid, VITE_APPCHECK_SITE_KEY: 'clave-publica' })
+    expect(withKey.ok && withKey.env.appCheckSiteKey).toBe('clave-publica')
+  })
+
   it('activa emuladores solo con "true"', () => {
     const result = readFirebaseEnv({ ...valid, VITE_USE_EMULATORS: 'true' })
     expect(result.ok && result.env.useEmulators).toBe(true)
