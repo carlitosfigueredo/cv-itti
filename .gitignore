@@ -16,3 +16,5 @@ functions/lib
 e2e/.results
 e2e/.screenshots
 playwright-report
+!functions/.env.cv-itti-dev
+!functions/.env.cv-itti
