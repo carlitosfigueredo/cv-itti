@@ -211,6 +211,7 @@ Todas son públicas en el navegador (las variables `VITE_*` se incluyen en el bu
 | `npm test` | Pruebas unitarias y de componentes (Vitest). |
 | `npm run test:rules` | Pruebas de reglas de Firestore y Storage contra emuladores. |
 | `npm run test:functions` | Pruebas de las Cloud Functions contra emuladores. |
+| `npm run check:indexes -- <proyecto>` | Ejecuta cada consulta de la app contra Firestore real y avisa si falta un índice (los emuladores no lo detectan). |
 | `npm run test:e2e` | Pruebas de punta a punta y responsive con Playwright (la primera vez: `npx playwright install chromium`). |
 
 ## Pruebas
