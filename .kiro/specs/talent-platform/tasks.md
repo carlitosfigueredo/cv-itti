@@ -166,23 +166,23 @@ without unbounded reads or access to private profiles.
 
 ## Phase 8 --- Administration and moderation
 
--   [ ] Implement trusted backend function(s) for administrative
+-   [x] Implement trusted backend function(s) for administrative
     operations.
--   [ ] Implement secure custom-claim provisioning outside the client.
--   [ ] Build protected admin page.
--   [ ] List and review public profiles.
--   [ ] Support unpublishing and account suspension through trusted
+-   [x] Implement secure custom-claim provisioning outside the client.
+-   [x] Build protected admin page.
+-   [x] List and review public profiles.
+-   [x] Support unpublishing and account suspension through trusted
     operations.
--   [ ] Record moderation events in `adminAudit` (written by functions).
--   [ ] Admin statistics: totals, published, with CV, Grupo Vazquez
+-   [x] Record moderation events in `adminAudit` (written by functions).
+-   [x] Admin statistics: totals, published, with CV, Grupo Vazquez
     counts, open reports (aggregation queries).
--   [ ] Admin user list with Grupo Vazquez filter; reports queue.
--   [ ] Account deletion callable function (user request and admin),
+-   [x] Admin user list with Grupo Vazquez filter; reports queue.
+-   [x] Account deletion callable function (user request and admin),
     idempotent, removing Storage file, Firestore docs, and Auth user.
--   [ ] "Delete my account" request UI in the dashboard.
--   [ ] Test that ordinary users cannot access or invoke admin
+-   [x] "Delete my account" request UI in the dashboard.
+-   [x] Test that ordinary users cannot access or invoke admin
     operations.
--   [ ] Document the safe process for granting/revoking administrators.
+-   [x] Document the safe process for granting/revoking administrators.
 
 **Exit criteria:** only authorized administrators can perform moderation
 actions.

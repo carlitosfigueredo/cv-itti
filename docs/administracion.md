@@ -61,6 +61,6 @@ npx firebase deploy --only functions --project dev
 
 La primera vez Firebase habilita las APIs necesarias y puede tardar varios minutos. Sin este despliegue, las acciones del panel `/admin` fallan.
 
-## Pendiente
+## Eliminar la propia cuenta
 
-- Botón "Eliminar mi cuenta" en el panel de la persona usuaria (la función `deleteAccount` ya lo soporta).
+En "Mi panel" hay una tarjeta **Eliminar mi cuenta**. Pide escribir `ELIMINAR`, vuelve a confirmar la identidad con Google (la función exige un inicio de sesión de menos de 5 minutos) y llama a `deleteAccount` sin `targetUid`. Una cuenta administradora no puede borrarse así: primero hay que quitarle el rol.

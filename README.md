@@ -38,6 +38,7 @@ Directorio de profesionales y CV para la comunidad de ITTI y Grupo Vázquez. Las
 - Consentimiento separado para mostrar email, teléfono y la respuesta "¿Afectado Grupo Vázquez?".
 - Subir, reemplazar, descargar y eliminar el CV (PDF de hasta 5 MB).
 - Publicar y dejar de publicar el perfil en cualquier momento.
+- Eliminar la cuenta (con confirmación de Google).
 
 **Administración**
 - Estadísticas, lista de usuarios, cola de reportes y auditoría.
@@ -275,7 +276,7 @@ Reportar vulnerabilidades: [.github/SECURITY.md](.github/SECURITY.md).
 |------|--------|
 | 0–7: base, Firebase, login, perfil, CV, publicación, directorio | Completas |
 | Rediseño, buscador, textos legales, CI y protección de `main` | Completos |
-| 8: administración y moderación | Implementada; falta "Eliminar mi cuenta" en el panel y desplegar las funciones |
+| 8: administración y moderación | Implementada; falta desplegar las Cloud Functions |
 | 9: seguridad y rendimiento (App Check, CSP, auditoría de dependencias) | Pendiente |
 | 10: publicación en producción | Pendiente |
 
