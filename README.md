@@ -294,4 +294,4 @@ Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-
 
 Ver [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md). La rama `main` está protegida: los cambios entran por pull request con revisión del responsable del código y la CI en verde.
 
-Licencia: pendiente de definir.
+Licencia: [MIT](LICENSE). El código es abierto; los datos de los perfiles y los CV no forman parte del repositorio ni de la licencia.
