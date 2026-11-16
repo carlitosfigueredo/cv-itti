@@ -225,24 +225,21 @@ La CI (`.github/workflows/ci.yml`) corre lint, tipos, pruebas unitarias, build, 
 
 ## Despliegue
 
-Siempre con el proyecto explícito (`--project dev` o `--project prod`). Producción solo con aprobación.
+| Rama | Ambiente | URL pública |
+|------|----------|-------------|
+| `develop` | dev / QA (`cv-itti-dev`) | https://cv-itti-dev.web.app |
+| `main` | producción (`cv-itti`) | https://cv-itti.web.app (con aprobación) |
+
+El frontend se despliega solo al hacer push a esas ramas (GitHub Actions + Workload Identity Federation, sin llaves). Reglas, índices y Cloud Functions se despliegan a mano. Detalle en [docs/despliegue.md](docs/despliegue.md).
 
 ```bash
-# Reglas e índices (esperar a que los índices esten en READY antes de usar el directorio)
+# Backend en dev (esperar a que los indices esten en READY)
 npx firebase deploy --only firestore:rules,firestore:indexes,storage --project dev
-gcloud firestore indexes composite list --project=cv-itti-dev --format="value(state)"
-
-# Cloud Functions
 npx firebase deploy --only functions --project dev
 
 # CORS del bucket (necesario para descargar CV desde el navegador)
 gcloud storage buckets update gs://cv-itti-dev.firebasestorage.app --cors-file=storage.cors.dev.json
-
-# Hosting
-npm run build:dev && npx firebase deploy --only hosting --project dev
 ```
-
-Para producción: `npm run build`, `--project prod`, `storage.cors.prod.json` y completar las variables legales en `.env.prod.local`.
 
 ## Seguridad y privacidad
 
@@ -268,7 +265,7 @@ Reportar vulnerabilidades: [.github/SECURITY.md](.github/SECURITY.md).
 - Los perfiles guardados antes de la búsqueda por palabras clave no aparecen al buscar por texto hasta que su dueño los vuelve a guardar.
 - Al ser una SPA, los perfiles públicos no están optimizados para buscadores (SEO).
 - App Check y la *Content Security Policy* todavía no están configurados.
-- El archivo JavaScript más grande pesa ~640 kB (incluye el SDK de Firebase); pendiente de optimizar.
+- El archivo JavaScript principal pesa ~207 kB comprimido (incluye Firebase).
 
 ## Estado del proyecto
 
@@ -289,6 +286,7 @@ Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-
 | [docs/firebase-setup.md](docs/firebase-setup.md) | Crear y conectar proyectos Firebase, emuladores, CORS. |
 | [docs/search.md](docs/search.md) | Búsqueda, filtros, índices y limitaciones. |
 | [docs/administracion.md](docs/administracion.md) | Rol de administrador, panel y moderación. |
+| [docs/despliegue.md](docs/despliegue.md) | Ramas, ambientes y despliegue continuo. |
 | [docs/change-tracker.md](docs/change-tracker.md) | Registro de cambios. |
 | [.kiro/specs/talent-platform/](.kiro/specs/talent-platform/) | Requisitos, diseño y plan de tareas. |
 

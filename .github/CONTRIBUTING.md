@@ -4,9 +4,9 @@
 
 ## Flujo de trabajo
 
-1. Hacé un fork o creá una rama desde `main`: `feature/descripcion` o `fix/descripcion`.
+1. Hacé un fork o creá una rama desde `develop`: `feature/descripcion` o `fix/descripcion`.
 2. Hacé commits chicos con el formato `tipo(alcance): descripción` (tipos: `feat`, `fix`, `docs`, `test`, `refactor`, `chore`). Mensajes en español.
-3. Abrí un pull request contra `main`. La rama `main` está protegida:
+3. Abrí un pull request contra `develop` (se despliega a QA). A `main` (producción) solo llegan PR desde `develop`. Ambas ramas están protegidas:
    - requiere pull request y la aprobación del responsable del código (ver `.github/CODEOWNERS`);
    - requiere que pase la integración continua (lint, tipos, pruebas, build, reglas de seguridad);
    - no permite push directo ni force push.
