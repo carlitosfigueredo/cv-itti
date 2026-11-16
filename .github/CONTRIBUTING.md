@@ -13,7 +13,7 @@
 
 ## Entorno local
 
-Ver el [README](README.md). Para trabajar no hacen falta credenciales reales: usá los emuladores (`npm run emulators` y `npm run dev:emu`).
+Ver el [README](../README.md). Para trabajar no hacen falta credenciales reales: usá los emuladores (`npm run emulators` y `npm run dev:emu`).
 
 ## Reglas importantes
 
