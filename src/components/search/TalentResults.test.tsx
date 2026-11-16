@@ -23,7 +23,10 @@ describe('TalentResults', () => {
     setup()
     expect(screen.getByRole('status', { name: /cargando/i })).toBeInTheDocument()
     expect(await screen.findByText('Ana Perez')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /beto gomez/i })).toHaveAttribute('href', '/talentos/b')
+    expect(screen.getByRole('link', { name: 'Ver perfil completo de Beto Gomez' })).toHaveAttribute('href', '/talentos/b')
+    // Un solo enlace por tarjeta: el boton explicito.
+    expect(screen.getAllByRole('link')).toHaveLength(2)
+    expect(screen.getAllByText('Ver perfil completo')).toHaveLength(2)
     expect(screen.getByText('2 perfiles')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /ver más/i })).not.toBeInTheDocument()
   })
