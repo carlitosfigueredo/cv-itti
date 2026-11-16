@@ -31,7 +31,12 @@ jobs:
         with:
           node-version: 26
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
       - run: npm ci
+      # El build revisa tambien los tipos de functions/ (tsc -b).
+      - run: npm ci --prefix functions
       - run: npm test
       - name: Build
         run: npm run ${{ github.ref_name == 'main' && 'build' || 'build:dev' }}
