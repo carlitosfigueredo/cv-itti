@@ -1,4 +1,4 @@
-import { doc, getDoc, runTransaction, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore'
+import { doc, getDoc, runTransaction, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore/lite'
 import { getFirebase } from '@/firebase/config'
 import type { AuthUser } from '@/types/auth'
 import type { ProfileContent, PublicProfile, UserDocument } from '@/types/profile'

@@ -8,7 +8,7 @@ import {
   where,
   type QueryConstraint,
   type QueryDocumentSnapshot,
-} from 'firebase/firestore'
+} from 'firebase/firestore/lite'
 import { getFirebase } from '@/firebase/config'
 import type { PublicProfile } from '@/types/profile'
 import { PAGE_SIZE, type DirectoryFilters } from '@/types/search'

@@ -1,4 +1,4 @@
-import type { Timestamp } from 'firebase/firestore'
+import type { Timestamp } from 'firebase/firestore/lite'
 import type { ReportReason } from '@/services/report.service'
 
 export type ModerateAction = 'unpublish' | 'removeCv' | 'suspend' | 'unsuspend'

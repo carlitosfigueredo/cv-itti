@@ -1,4 +1,4 @@
-import type { Timestamp } from 'firebase/firestore'
+import type { Timestamp } from 'firebase/firestore/lite'
 import type { ProfileFormInput, ProfileFormOutput } from '@/schemas/profile'
 import type { ProfileContent, PublicProfile } from '@/types/profile'
 import { AREA_LABELS } from '@/utils/catalogs'

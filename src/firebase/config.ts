@@ -1,6 +1,6 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from 'firebase/app'
 import { connectAuthEmulator, getAuth, type Auth } from 'firebase/auth'
-import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore'
+import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore/lite'
 import { connectFunctionsEmulator, getFunctions, type Functions } from 'firebase/functions'
 import { connectStorageEmulator, getStorage, type FirebaseStorage } from 'firebase/storage'
 import type { FirebaseEnv } from './env'

@@ -1,4 +1,4 @@
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore/lite'
 import { getFirebase } from '@/firebase/config'
 
 export const REPORT_REASONS = ['inappropriate', 'false_information', 'spam', 'other'] as const
