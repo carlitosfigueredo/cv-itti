@@ -68,7 +68,14 @@ export const validateCvUpload = onObjectFinalized(
 // el cliente solo oculta botones, no es una barrera de seguridad.
 // maxInstances limita el costo ante un uso abusivo.
 // ---------------------------------------------------------------------------
-const CALLABLE_OPTIONS = { region: 'us-central1', maxInstances: 5, timeoutSeconds: 60 } as const
+// App Check: se exige solo si ENFORCE_APP_CHECK=true en functions/.env.<proyecto>.
+// Se activa despues de verificar en la consola que el trafico real trae tokens validos.
+const CALLABLE_OPTIONS = {
+  region: 'us-central1',
+  maxInstances: 5,
+  timeoutSeconds: 60,
+  enforceAppCheck: process.env['ENFORCE_APP_CHECK'] === 'true',
+}
 
 function deps(): Deps {
   return { db: getFirestore(), auth: getAuth(), bucket: getStorage().bucket() }
@@ -115,7 +122,7 @@ export const moderateAccount = onCall(CALLABLE_OPTIONS, (request) =>
   }),
 )
 
-export const resolveReportCall = onCall({ ...CALLABLE_OPTIONS }, (request) =>
+export const resolveReportCall = onCall(CALLABLE_OPTIONS, (request) =>
   run(async () => {
     const actorUid = requireAdmin(request)
     const { reportId, resolution } = parseResolveReportInput(request.data)

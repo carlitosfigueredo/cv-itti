@@ -1,4 +1,5 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from 'firebase/app'
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check'
 import { connectAuthEmulator, getAuth, type Auth } from 'firebase/auth'
 import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore/lite'
 import { connectFunctionsEmulator, getFunctions, type Functions } from 'firebase/functions'
@@ -31,6 +32,16 @@ export function initFirebase(env: FirebaseEnv): FirebaseServices {
         messagingSenderId: env.messagingSenderId,
         appId: env.appId,
       })
+
+  // App Check va antes que cualquier otro servicio: asi todas las llamadas a Firestore,
+  // Storage y Functions llevan el token que prueba que vienen de esta app.
+  // No se usa con emuladores (no lo validan) ni si falta la clave.
+  if (env.appCheckSiteKey && !env.useEmulators) {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider(env.appCheckSiteKey),
+      isTokenAutoRefreshEnabled: true,
+    })
+  }
 
   const auth = getAuth(app)
   const db = getFirestore(app)

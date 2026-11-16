@@ -194,6 +194,7 @@ Todas son públicas en el navegador (las variables `VITE_*` se incluyen en el bu
 | `VITE_USE_EMULATORS` | No | `true` para conectar a los emuladores locales. |
 | `VITE_LEGAL_OWNER` | Para publicar | Nombre del responsable que figura en los textos legales. |
 | `VITE_LEGAL_CONTACT_EMAIL` | Para publicar | Email de contacto y para ejercer derechos sobre datos. Si falta, las páginas legales muestran un aviso de borrador. |
+| `VITE_APPCHECK_SITE_KEY` | Recomendada | Clave de sitio de reCAPTCHA Enterprise para App Check (pública). Si falta, App Check no se activa. |
 
 ## Scripts
 
@@ -247,7 +248,9 @@ gcloud storage buckets update gs://cv-itti-dev.firebasestorage.app --cors-file=s
 - Perfiles y CV privados por defecto; publicación y datos de contacto con consentimiento explícito y separado.
 - Rol de administrador como *custom claim*, otorgado solo desde código de confianza. Acciones de moderación en Cloud Functions con verificación en el servidor y auditoría.
 - Validación de PDF en tres capas: navegador (tipo, tamaño y firma `%PDF-`), reglas de Storage (tipo y 5 MB) y la función `validateCvUpload` (contenido real).
+- App Check con reCAPTCHA Enterprise (hoy en modo monitoreo) y Content Security Policy estricta (sin `eval`).
 - Encabezados de seguridad en Hosting (HSTS, `X-Frame-Options`, `nosniff`, `Referrer-Policy`).
+- 0 vulnerabilidades conocidas en las dependencias que llegan al navegador. Detalle en [docs/seguridad.md](docs/seguridad.md).
 - Sin analítica ni cookies publicitarias. Los logs no registran datos personales.
 - Textos legales en `/legal/*`, tomando como referencia la Ley N.º 7593/2025 de Paraguay. **Borrador: requieren revisión legal.**
 
@@ -264,7 +267,7 @@ Reportar vulnerabilidades: [.github/SECURITY.md](.github/SECURITY.md).
 - La caja de búsqueda encuentra una palabra a la vez (Firestore no tiene búsqueda de texto completo). Si hace falta más, ver [docs/search.md](docs/search.md) (Algolia / Typesense).
 - Los perfiles guardados antes de la búsqueda por palabras clave no aparecen al buscar por texto hasta que su dueño los vuelve a guardar.
 - Al ser una SPA, los perfiles públicos no están optimizados para buscadores (SEO).
-- App Check y la *Content Security Policy* todavía no están configurados.
+- App Check está activo pero todavía no se exige (modo monitoreo). Ver [docs/seguridad.md](docs/seguridad.md#estado-modo-monitoreo-no-se-exige).
 - El archivo JavaScript principal pesa ~207 kB comprimido (incluye Firebase).
 
 ## Estado del proyecto
@@ -274,7 +277,7 @@ Reportar vulnerabilidades: [.github/SECURITY.md](.github/SECURITY.md).
 | 0–7: base, Firebase, login, perfil, CV, publicación, directorio | Completas |
 | Rediseño, buscador, textos legales, CI y protección de `main` | Completos |
 | 8: administración y moderación | Implementada; falta desplegar las Cloud Functions |
-| 9: seguridad y rendimiento (App Check, CSP, auditoría de dependencias) | Pendiente |
+| 9: seguridad y rendimiento (App Check, CSP, dependencias, bundle) | Completa; falta exigir App Check tras revisar métricas |
 | 10: publicación en producción | Pendiente |
 
 Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-platform/tasks.md) y cambios en [docs/change-tracker.md](docs/change-tracker.md).
@@ -287,6 +290,7 @@ Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-
 | [docs/search.md](docs/search.md) | Búsqueda, filtros, índices y limitaciones. |
 | [docs/administracion.md](docs/administracion.md) | Rol de administrador, panel y moderación. |
 | [docs/despliegue.md](docs/despliegue.md) | Ramas, ambientes y despliegue continuo. |
+| [docs/seguridad.md](docs/seguridad.md) | Capas de seguridad, App Check, CSP y dependencias. |
 | [docs/change-tracker.md](docs/change-tracker.md) | Registro de cambios. |
 | [.kiro/specs/talent-platform/](.kiro/specs/talent-platform/) | Requisitos, diseño y plan de tareas. |
 
@@ -294,4 +298,4 @@ Detalle por fase en [`.kiro/specs/talent-platform/tasks.md`](.kiro/specs/talent-
 
 Ver [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md). La rama `main` está protegida: los cambios entran por pull request con revisión del responsable del código y la CI en verde.
 
-Licencia: pendiente de definir.
+Licencia: [MIT](LICENSE). El código es abierto; los datos de los perfiles y los CV no forman parte del repositorio ni de la licencia.
