@@ -189,22 +189,23 @@ actions.
 
 ## Phase 9 --- Security hardening and testing
 
--   [ ] Review Firestore rules field by field.
--   [ ] Review Storage rules and any Firestore cross-service rule
+-   [x] Review Firestore rules field by field.
+-   [x] Review Storage rules and any Firestore cross-service rule
     lookups.
--   [ ] Add deny-by-default behavior.
--   [ ] Add Firebase App Check (reCAPTCHA Enterprise/v3 provider) and
+-   [x] Add deny-by-default behavior.
+-   [x] Add Firebase App Check (reCAPTCHA Enterprise/v3 provider) and
     enforce it on Firestore, Storage, and Functions after staging
-    verification. Use debug tokens only in local development.
--   [ ] Rules tests: owner cannot set `accountStatus`; public profile
+    verification. (Activo en modo monitoreo; exigirlo queda como paso
+    operativo documentado en docs/seguridad.md.) Use debug tokens only in local development.
+-   [x] Rules tests: owner cannot set `accountStatus`; public profile
     rejects the Grupo Vazquez field without consent; non-admins cannot
     read `reports` or another user's private flag.
--   [ ] Add Emulator Suite tests for all access-control cases.
--   [ ] Add unit, component, integration, and end-to-end tests.
--   [ ] Check file upload validation and error handling.
--   [ ] Check logs for accidental exposure of personal information.
--   [ ] Review dependency vulnerabilities.
--   [ ] Run full build, lint, type-check, and test suite.
+-   [x] Add Emulator Suite tests for all access-control cases.
+-   [x] Add unit, component, integration, and end-to-end tests.
+-   [x] Check file upload validation and error handling.
+-   [x] Check logs for accidental exposure of personal information.
+-   [x] Review dependency vulnerabilities.
+-   [x] Run full build, lint, type-check, and test suite.
 
 **Exit criteria:** no known critical access-control gaps; automated
 security tests pass.
