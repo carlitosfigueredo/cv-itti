@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 # Minimo privilegio: el workflow solo lee el repositorio.
 permissions:
